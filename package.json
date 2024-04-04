@@ -11,7 +11,8 @@
     "pretest": "cross-env NODE_ENV=test npm run db:reset",
     "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all --seeders-path ./database/seeders/test",
     "db:create:test": "cross-env NODE_ENV=test npx sequelize-cli db:create",
-    "start": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "startdev": "nodemon src/server.js",
     "migrate": "npx sequelize-cli db:migrate"
   },
   "author": "Nkechi Anyanwu",

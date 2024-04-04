@@ -5,7 +5,7 @@ const { getAllItems,
     addNewItem,
     updateItem,
     deleteItem,
-    moveCheckedItem} = require('../controllers/controller');
+    moveCheckedItem } = require('../controllers/controller');
 const { validateNewGroceryItem } = require('../../utilities/model');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json(); //used only in specific routes
@@ -94,6 +94,7 @@ checklistRouter.put('/:itemID', jsonParser, async (req, res, next) => {
 
     if (update.purchased === true ) { //if this item has been marked as purchased
         let updatedChecklist;
+        // eslint-disable-next-line no-useless-catch
         try {
             updatedChecklist = await moveCheckedItem(itemID);
         } catch (err) {
@@ -125,7 +126,7 @@ checklistRouter.delete('/:itemID', jsonParser, async (req, res, next) => {
 });
 
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res) => {
     res.status(err.status).send(err.message);
 };
 
