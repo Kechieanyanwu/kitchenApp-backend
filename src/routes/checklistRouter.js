@@ -1,18 +1,18 @@
 const express = require('express');
 const checklistRouter = express.Router(); //creating a router instance 
 const { getAllItems,
-        getItem,
-        addNewItem,
-        updateItem,
-        deleteItem,
-        moveCheckedItem} = require('../controllers/controller');
+    getItem,
+    addNewItem,
+    updateItem,
+    deleteItem,
+    moveCheckedItem} = require('../controllers/controller');
 const { validateNewGroceryItem } = require('../../utilities/model');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json(); //used only in specific routes
 
 const { Checklist } = require('../../database/models/checklist'); 
-const { sequelize } = require('../../database/models');
-const { Inventory } = require('../../database/models/inventory');
+// const { sequelize } = require('../../database/models');
+// const { Inventory } = require('../../database/models/inventory');
 
 // const passport = require('passport');
 // require('../../config/JWT_strategy');
@@ -74,7 +74,7 @@ checklistRouter.get('/:itemID', async (req, res, next) => {
 //add new checklist item
 checklistRouter.post('/', jsonParser, validateNewGroceryItem, async (req, res, next) => {
     let addedItem;
-    const newItem = {item_name: req.item_name, quantity: req.quantity, category_id: req.category_id, user_id: req.user_id};
+    const newItem = { item_name: req.item_name, quantity: req.quantity, category_id: req.category_id, user_id: req.user_id };
     try {
         addedItem = await addNewItem(Checklist, newItem);
     } catch (err) {
