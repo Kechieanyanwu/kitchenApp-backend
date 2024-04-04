@@ -53,39 +53,42 @@ app.use((req, res, next) => {
 });
 
 // const isJWTAuth = (req, res, next) => {
-//     console.log('in isJWTauth'); //test
+//     console.log('in isJWTAuth'); //test
 //     if (req.headers.authorization) {
-//         passport.authenticate('jwt', { session: false }, function(err, user) {
-//             if(!err && user) {
+//         passport.authenticate('jwt', { session: false }, function(err, user, info) {
+//             if (!err && user) {
 //                 req.user = user;
 //                 next();
 //             } else {
-//                 res.status(401).json({ authenticated: false, message: 'Error occured' });
+//                 console.log(info); // To understand why authentication failed
+//                 res.status(401).json({ authenticated: false, message: 'Failed to authenticate using JWT' });
 //             }
-//         });
+//         })(req, res, next); // Don't forget to invoke it
 //     } else {
-//         res.status(401).json({ message: 'No JWT token supplied'});
+//         res.status(401).json({ message: 'No JWT token supplied' });
 //     }
 // };
-// checklistRouter.use(passport.authenticate('jwt', { session: false })); //just added
-// checklistRouter.use(isJWTAuth); //just added
+
+// categoriesRouter.use(isJWTAuth);
+// checklistRouter.use(isJWTAuth);
+// inventoryRouter.use(isJWTAuth);
 
 app.use('/categories', categoriesRouter);
 app.use('/checklist', checklistRouter);
 app.use('/inventory', inventoryRouter);
 app.use('/user', userRouter);
 
-app.get('/protected-route', passport.authenticate('jwt', { session: false }), (req, res) => {
-    res.send(`
-            <h1>You made it to the route.</h1><br>
-            <a href="/logout">Logout</a>`);
-});
-
-// app.get('/protected-route', isAuth, (req, res) => {
+// app.get('/protected-route', passport.authenticate('jwt', { session: false }), (req, res) => {
 //     res.send(`
 //             <h1>You made it to the route.</h1><br>
 //             <a href="/logout">Logout</a>`);
 // });
+
+app.get('/protected-route', isAuth, (req, res) => {
+    res.send(`
+            <h1>You made it to the route.</h1><br>
+            <a href="/logout">Logout</a>`);
+});
 
 app.get('/login-success', (req, res) => {
     res.send('<p>You successfully logged in. --> <a href="/protected-route">Go to protected route</a></p>');
