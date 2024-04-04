@@ -1,7 +1,5 @@
 .env
 .vscode/
-frontend/node_modules/
-backend/node_modules/
+pemfiles/
 node_modules/
-backend/pemfiles/
 
