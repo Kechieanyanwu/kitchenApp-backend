@@ -14,46 +14,48 @@ const { Checklist } = require('../../database/models/checklist');
 const { sequelize } = require('../../database/models');
 const { Inventory } = require('../../database/models/inventory');
 
-const passport = require('passport');
-require('../../config/JWT_strategy');
-// const passport = require('passport'); //test
-// require('../../config/JWT_strategy')(passport); //test
-checklistRouter.use(passport.initialize());
+// const passport = require('passport');
+// require('../../config/JWT_strategy');
+// checklistRouter.use(passport.initialize());
 
-// checklistRouter.use((req, res, next) => { //test
-//     console.log('Logging headers before entering checklist route', req.headers);
-//     next();
-// });
+checklistRouter.use((req, res, next) => { //test
+    console.log('Logging headers before entering checklist route', req.headers);
+    next();
+});
 
 // checklistRouter.use(passport.authenticate('jwt', { session: false })); //just added
 
 
-const isJWTAuth = (req, res, next) => {
-    console.log('in isJWTauth'); //test
-    if (req.headers.authorization) {
-        passport.authenticate('jwt', { session: false }, function(err, user) {
-            if(!err && user) {
-                req.user = user;
-                next();
-            } else {
-                res.status(401).json({ authenticated: false, message: 'Error occured' });
-            }
-        });
-    } else {
-        res.status(401).json({ message: 'No JWT token supplied'});
-    }
-};
+// const isJWTAuth = (req, res, next) => {
+//     console.log('in isJWTauth'); //test
+//     if (req.headers.authorization) {
+//         console.log('you\'ve got an authorisation header'); //test
+//         passport.authenticate('jwt', { session: false }, function(err, user, info) {
+//             if (!err && user) {
+//                 req.user = user;
+//                 next();
+//             } else {
+//                 // It's also useful to provide more information on why authentication failed
+//                 // This could be due to various reasons like token expired, token not found, etc.
+//                 console.log(info); // Logging the reason for authentication failure
+//                 res.status(401).json({ authenticated: false, message: 'Failed to authenticate using JWT' });
+//             }
+//         })(req, res, next); // This invokes the passport.authenticate function
+//     } else {
+//         res.status(401).json({ message: 'No JWT token supplied' });
+//     }
+// };
 
 //get all checklist items
-// checklistRouter.get('/', async (req, res, next) => {
-checklistRouter.get('/', isJWTAuth, async (req, res, next) => {
+checklistRouter.get('/', async (req, res, next) => {
+// checklistRouter.get('/', isJWTAuth, async (req, res, next) => {
     let checklistArray;
     try {
         checklistArray = await getAllItems(Checklist); //based on ID
     } catch (err) {
-        next(err) //validate that all errs have message and status 
+        next(err); //validate that all errs have message and status 
     }
-    res.status(200).json(checklistArray)
+    res.status(200).json(checklistArray);
 });
 
 //get specific item
@@ -61,13 +63,13 @@ checklistRouter.get('/:itemID', async (req, res, next) => {
     const itemID = req.params.itemID;
     let item; 
     try {
-        item = await getItem(Checklist, itemID)
+        item = await getItem(Checklist, itemID);
     } catch (err) {
         err.status = 400;
         next(err);
     }
     res.status(200).send(item);
-})
+});
 
 //add new checklist item
 checklistRouter.post('/', jsonParser, validateNewGroceryItem, async (req, res, next) => {
@@ -79,8 +81,8 @@ checklistRouter.post('/', jsonParser, validateNewGroceryItem, async (req, res, n
         err.status = 400;
         next(err);
     }
-    res.status(201).send(addedItem)
-})
+    res.status(201).send(addedItem);
+});
 
 
 //update existing checklist item
@@ -91,7 +93,7 @@ checklistRouter.put('/:itemID', jsonParser, async (req, res, next) => {
     let updatedItem;
 
     if (update.purchased === true ) { //if this item has been marked as purchased
-        let updatedChecklist
+        let updatedChecklist;
         try {
             updatedChecklist = await moveCheckedItem(itemID);
         } catch (err) {
@@ -106,7 +108,7 @@ checklistRouter.put('/:itemID', jsonParser, async (req, res, next) => {
         }
         res.status(200).send(updatedItem);
     }
-})
+});
 
 checklistRouter.delete('/:itemID', jsonParser, async (req, res, next) => {
 
@@ -118,9 +120,9 @@ checklistRouter.delete('/:itemID', jsonParser, async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-    res.status(200).send(updatedChecklist)
+    res.status(200).send(updatedChecklist);
 
-})
+});
 
 
 const errorHandler = (err, req, res, next) => {

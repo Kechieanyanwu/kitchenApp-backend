@@ -2,18 +2,21 @@
 const passport = require('passport');
 const fs = require('fs');
 const { User } = require('../database/models/user');
+const path = require('path');
 
 const jwtStrategy = require('passport-jwt').Strategy;
 const extractJWT = require('passport-jwt').ExtractJwt;
 
-const publicKey = fs.readFileSync(__dirname + '/../pemfiles/id_rsa_pub.pem');
+const pathToKey = path.join(__dirname, '../pemfiles/id_rsa_pub.pem');
+const publicKey = fs.readFileSync(pathToKey, 'utf8');
+// const publicKey = fs.readFileSync(__dirname + '/../pemfiles/id_rsa_pub.pem');
 
 const options = {
     secretOrKey: publicKey,
     jwtFromRequest: extractJWT.fromAuthHeaderAsBearerToken(),
     issuer: 'localhost:4002',
     audience: 'mylocalapp',
-    algorithms: ['HS256'],
+    algorithms: ['RS256'],
 
 };
 
@@ -38,8 +41,3 @@ const verifyCallback = async (jwt_payload, done) => {
 const strategy = new jwtStrategy(options, verifyCallback);
 
 passport.use(strategy);
-
-// module.exports = (passport) => { //just added as test
-//     passport.use(strategy);
-// };
-
