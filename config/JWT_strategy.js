@@ -25,15 +25,19 @@ const verifyCallback = async (jwt_payload, done) => {
     let user;
     console.log('You are in your JWT strategy verify callback'); //test
     //could use a cachedUser service here
+    console.log('jwt payload', jwt_payload); //test
     try {
+        console.log('subject of jwt payload', jwt_payload.sub); //test
         user = await User.findOne({ where: { id: jwt_payload.sub } });
     } catch (err) {
         done(err, false);
     }
 
     if (user) {
+        console.log('there\'s a user in your verify callback'); //test
         return done(null, user);
     } else {
+        console.log('there\'s no user in your verify callback'); //test
         return done(null, false);
     }
 

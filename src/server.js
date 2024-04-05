@@ -26,6 +26,7 @@ const passport = require('passport');
 const issueToken = require('../utilities/auth/issueJWT');
 require('../config/passport');
 
+
 const sessionStore = new SequelizeStore({
     db: sequelize,
 });
@@ -78,26 +79,18 @@ app.use('/checklist', checklistRouter);
 app.use('/inventory', inventoryRouter);
 app.use('/user', userRouter);
 
-// app.get('/protected-route', passport.authenticate('jwt', { session: false }), (req, res) => {
-//     res.send(`
-//             <h1>You made it to the route.</h1><br>
-//             <a href="/logout">Logout</a>`);
-// });
 
-app.get('/protected-route', isAuth, (req, res) => {
-    res.send(`
-            <h1>You made it to the route.</h1><br>
-            <a href="/logout">Logout</a>`);
+// app.post("/login", passport.authenticate("local", { failureRedirect: '/login-failure', successRedirect: 'login-success' }), (req, res) => { could use only failureRedirect
+app.post('/login', passport.authenticate('local', { failureRedirect: '/login-failure' }), (req, res) => {
+    // const tokenObject = issueToken(req.user);
+    const tokenObject = issueToken(req.user.dataValues.id);
+    const expiry = new Date(tokenObject.expires * 1000);
+    console.log('Post route token: ', tokenObject, 'Expiry: ', expiry);
+
+    res.status(200);    
+    res.cookie('auth_token', tokenObject.token, { expires: expiry, httpOnly: true, secure: true });
+    res.redirect('/login-success');
 });
-
-app.get('/login-success', (req, res) => {
-    res.send('<p>You successfully logged in. --> <a href="/protected-route">Go to protected route</a></p>');
-});
-
-app.get('/login-failure', (req, res) => {
-    res.send('You entered the wrong email or password.');
-});
-
 
 app.get('/login', async (req, res) => {
     res.status(200).send(
@@ -112,6 +105,30 @@ app.get('/login', async (req, res) => {
     );
 });
 
+app.get('/protected-route', isAuth, (req, res) => {
+    res.send(`
+            <h1>You made it to the route.</h1><br>
+            <a href="/logout">Logout</a>`);
+});
+
+
+// app.get('/protected-route', passport.authenticate('jwt', { session: false }), (req, res) => {
+//     res.send(`
+//             <h1>You made it to the route.</h1><br>
+//             <a href="/logout">Logout</a>`);
+// });
+
+app.get('/login-success', (req, res) => {
+    res.send('<p>You successfully logged in. --> <a href="/protected-route">Go to protected route</a></p>');
+});
+
+app.get('/login-failure', (req, res) => {
+    res.send('You entered the wrong email or password.');
+});
+
+
+
+
 app.get('/', (req, res) => {
     res.status(200).send('<h1>Hello World</h1>');
 });
@@ -121,16 +138,7 @@ app.get('/logout', (req, res) => {
     res.redirect('/protected-route');
 });
 
-// app.post("/login", passport.authenticate("local", { failureRedirect: '/login-failure', successRedirect: 'login-success' }), (req, res) => { could use only failureRedirect
-app.post('/login', passport.authenticate('local', { failureRedirect: '/login-failure' }), (req, res) => {
-    const tokenObject = issueToken(req.user);
-    const expiry = new Date(tokenObject.expires * 1000);
-    console.log('Post route token: ', tokenObject, 'Expiry: ', expiry);
 
-    res.status(200);    
-    res.cookie('auth_token', tokenObject.token, { expires: expiry, httpOnly: true, secure: true });
-    res.redirect('/login-success');
-});
 
 const server = app.listen(PORT, () => { 
     console.log(`Kitchen App is listening on port ${PORT}`);

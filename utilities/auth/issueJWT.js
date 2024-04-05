@@ -6,12 +6,10 @@ const fs = require('fs');
 // const privateKey = fs.readFileSync(__dirname + '/../pemfiles/id_rsa_priv.pem');
 
 
-const issueToken = (user) => {
+const issueToken = (userID) => {
     const privateKey = fs.readFileSync(__dirname + '/../../pemfiles/id_rsa_priv.pem');
-    const { id } = user;
-    // const expiresIn = '1d';
     const expiresIn = Math.floor(Date.now() / 1000) + (60 * 60 * 24);
-    // const expiresIn = 60 * 60 * 24;
+
     const options = {
         algorithm: 'RS256',
         expiresIn: expiresIn,
@@ -20,7 +18,7 @@ const issueToken = (user) => {
     };
 
     const payload = {
-        sub: id,
+        sub: userID,
         iat: Date.now()
     };
 
