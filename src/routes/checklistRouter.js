@@ -9,7 +9,7 @@ const { getAllItems,
 const { validateNewGroceryItem } = require('../../utilities/model');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json(); //used only in specific routes
-const isJWTAuth = require('../../config/isJWTAuth');
+const isJWTAuth = require('../../config/isJWTAuth'); //test
 
 const { Checklist } = require('../../database/models/checklist'); 
 
