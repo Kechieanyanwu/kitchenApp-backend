@@ -123,12 +123,12 @@ app.get('/logout', (req, res) => {
 
 // app.post("/login", passport.authenticate("local", { failureRedirect: '/login-failure', successRedirect: 'login-success' }), (req, res) => { could use only failureRedirect
 app.post('/login', passport.authenticate('local', { failureRedirect: '/login-failure' }), (req, res) => {
-    //if we get here, there is req.user, so no need to check but can write a test to assert
-
     const tokenObject = issueToken(req.user);
+    const expiry = new Date(tokenObject.expires * 1000);
+    console.log('Post route token: ', tokenObject, 'Expiry: ', expiry);
 
-    res.status(200);
-    res.cookie('auth_token', tokenObject.token, { expires: new Date(Date.now() + tokenObject.expires), httpOnly: true, secure: true });
+    res.status(200);    
+    res.cookie('auth_token', tokenObject.token, { expires: expiry, httpOnly: true, secure: true });
     res.redirect('/login-success');
 });
 
