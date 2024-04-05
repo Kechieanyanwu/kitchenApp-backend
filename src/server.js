@@ -53,22 +53,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// const isJWTAuth = (req, res, next) => {
-//     console.log('in isJWTAuth'); //test
-//     if (req.headers.authorization) {
-//         passport.authenticate('jwt', { session: false }, function(err, user, info) {
-//             if (!err && user) {
-//                 req.user = user;
-//                 next();
-//             } else {
-//                 console.log(info); // To understand why authentication failed
-//                 res.status(401).json({ authenticated: false, message: 'Failed to authenticate using JWT' });
-//             }
-//         })(req, res, next); // Don't forget to invoke it
-//     } else {
-//         res.status(401).json({ message: 'No JWT token supplied' });
-//     }
-// };
+
 
 // categoriesRouter.use(isJWTAuth);
 // checklistRouter.use(isJWTAuth);
