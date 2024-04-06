@@ -12,7 +12,10 @@
     "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all --seeders-path ./database/seeders/test",
     "db:create:test": "cross-env NODE_ENV=test npx sequelize-cli db:create",
     "start": "node src/server.js",
-    "migrate": "npx sequelize-cli db:migrate"
+    "startdev": "nodemon src/server.js",
+    "migrate": "npx sequelize-cli db:migrate",
+    "build": "webpack",
+    "prod": "node dist/final.js"
   },
   "author": "Nkechi Anyanwu",
   "license": "ISC",
@@ -34,7 +37,10 @@
     "sequelize": "^6.35.1",
     "sequelize-cli": "^6.6.2",
     "sinon": "^16.1.0",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

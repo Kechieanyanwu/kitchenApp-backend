@@ -3,3 +3,4 @@
 pemfiles/
 node_modules/
 
+.vercel

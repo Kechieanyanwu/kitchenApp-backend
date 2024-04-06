@@ -1,54 +1,25 @@
 const express = require('express');
 const checklistRouter = express.Router(); //creating a router instance 
 const { getAllItems,
-        getItem,
-        addNewItem,
-        updateItem,
-        deleteItem,
-        moveCheckedItem} = require('../controllers/controller');
+    getItem,
+    addNewItem,
+    updateItem,
+    deleteItem,
+    moveCheckedItem } = require('../controllers/controller');
 const { validateNewGroceryItem } = require('../../utilities/model');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json(); //used only in specific routes
+const isJWTAuth = require('../../config/isJWTAuth'); //test
 
 const { Checklist } = require('../../database/models/checklist'); 
-const { sequelize } = require('../../database/models');
-const { Inventory } = require('../../database/models/inventory');
-
-// const passport = require('passport');
-// require('../../config/JWT_strategy');
-// checklistRouter.use(passport.initialize());
 
 checklistRouter.use((req, res, next) => { //test
     console.log('Logging headers before entering checklist route', req.headers);
     next();
 });
 
-// checklistRouter.use(passport.authenticate('jwt', { session: false })); //just added
-
-
-// const isJWTAuth = (req, res, next) => {
-//     console.log('in isJWTauth'); //test
-//     if (req.headers.authorization) {
-//         console.log('you\'ve got an authorisation header'); //test
-//         passport.authenticate('jwt', { session: false }, function(err, user, info) {
-//             if (!err && user) {
-//                 req.user = user;
-//                 next();
-//             } else {
-//                 // It's also useful to provide more information on why authentication failed
-//                 // This could be due to various reasons like token expired, token not found, etc.
-//                 console.log(info); // Logging the reason for authentication failure
-//                 res.status(401).json({ authenticated: false, message: 'Failed to authenticate using JWT' });
-//             }
-//         })(req, res, next); // This invokes the passport.authenticate function
-//     } else {
-//         res.status(401).json({ message: 'No JWT token supplied' });
-//     }
-// };
-
 //get all checklist items
-checklistRouter.get('/', async (req, res, next) => {
-// checklistRouter.get('/', isJWTAuth, async (req, res, next) => {
+checklistRouter.get('/', isJWTAuth, async (req, res, next) => {
     let checklistArray;
     try {
         checklistArray = await getAllItems(Checklist); //based on ID
@@ -74,7 +45,7 @@ checklistRouter.get('/:itemID', async (req, res, next) => {
 //add new checklist item
 checklistRouter.post('/', jsonParser, validateNewGroceryItem, async (req, res, next) => {
     let addedItem;
-    const newItem = {item_name: req.item_name, quantity: req.quantity, category_id: req.category_id, user_id: req.user_id};
+    const newItem = { item_name: req.item_name, quantity: req.quantity, category_id: req.category_id, user_id: req.user_id };
     try {
         addedItem = await addNewItem(Checklist, newItem);
     } catch (err) {
@@ -94,6 +65,7 @@ checklistRouter.put('/:itemID', jsonParser, async (req, res, next) => {
 
     if (update.purchased === true ) { //if this item has been marked as purchased
         let updatedChecklist;
+        // eslint-disable-next-line no-useless-catch
         try {
             updatedChecklist = await moveCheckedItem(itemID);
         } catch (err) {
@@ -125,7 +97,7 @@ checklistRouter.delete('/:itemID', jsonParser, async (req, res, next) => {
 });
 
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res) => {
     res.status(err.status).send(err.message);
 };
 
