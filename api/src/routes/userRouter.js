@@ -2,10 +2,10 @@ const express = require('express');
 const userRouter = express.Router();
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
-const { validateNewUser } = require("../../utilities/model");
-const { hashPassword }  = require("../../utilities/password");
+const { validateNewUser } = require("../../../utilities/model");
+const { hashPassword }  = require("../../../utilities/password");
 const { addNewItem, deleteItem } = require('../controllers/controller');
-const { User } = require('../../database/models/user');
+const { User } = require('../../../database/models/user');
 
 
 // user register

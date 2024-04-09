@@ -1,9 +1,9 @@
 // Model and Sequelize Imports
-const { sequelize } = require("../../database/models"); 
-const { Checklist } = require("../../database/models/checklist");
-const { Inventory } = require("../../database/models/inventory");
-const { nonExistentItemError } = require("../../utilities/errors");
-const { validateID } = require("../../utilities/model");
+const { sequelize } = require("../../../database/models"); 
+const { Checklist } = require("../../../database/models/checklist");
+const { Inventory } = require("../../../database/models/inventory");
+const { nonExistentItemError } = require("../../../utilities/errors");
+const { validateID } = require("../../../utilities/model");
 
 
 // to be modified to filter by user

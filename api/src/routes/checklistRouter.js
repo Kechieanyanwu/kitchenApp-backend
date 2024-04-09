@@ -6,12 +6,12 @@ const { getAllItems,
     updateItem,
     deleteItem,
     moveCheckedItem } = require('../controllers/controller');
-const { validateNewGroceryItem } = require('../../utilities/model');
+const { validateNewGroceryItem } = require('../../../utilities/model');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json(); //used only in specific routes
-const isJWTAuth = require('../../config/isJWTAuth'); //test
+const isJWTAuth = require('../../../config/isJWTAuth'); //test
 
-const { Checklist } = require('../../database/models/checklist'); 
+const { Checklist } = require('../../../database/models/checklist'); 
 
 checklistRouter.use((req, res, next) => { //test
     console.log('Logging headers before entering checklist route', req.headers);
