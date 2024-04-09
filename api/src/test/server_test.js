@@ -18,10 +18,10 @@ const { getAllItems } = require('../controllers/controller');
 const { incompleteUserError,
     nonExistentItemError,
     incompleteItemError,
-    incompleteCategoryError } = require("../../utilities/errors");
+    incompleteCategoryError } = require("../../../utilities/errors");
 
 // Sequelize Imports
-const { Inventory } = require('../../database/models/inventory');
+const { Inventory } = require('../../../database/models/inventory');
 
 // Usage binding
 chai.use(require('chai-json-schema-ajv')); //for validating JSON schema

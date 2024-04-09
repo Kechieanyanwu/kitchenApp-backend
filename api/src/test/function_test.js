@@ -16,8 +16,8 @@ const { getAllItems,
         deleteItem} = require('../controllers/controller');
 
 // Sequelize Imports
-const { Category } = require('../../database/models/category');
-const { sequelize, Sequelize } = require('../../database/models');
+const { Category } = require('../../../database/models/category');
+const { sequelize, Sequelize } = require('../../../database/models');
 
 // Usage binding
 chai.use(require('chai-json-schema-ajv')); //for validating JSON schema
