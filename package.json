@@ -2,7 +2,7 @@
   "name": "kitchenapp",
   "version": "1.0.0",
   "description": "Kitchen Inventory Management",
-  "main": "src/server.js",
+  "main": "src/index.js",
   "directories": {
     "test": "src/test"
   },
@@ -11,8 +11,8 @@
     "pretest": "cross-env NODE_ENV=test npm run db:reset",
     "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all --seeders-path ./database/seeders/test",
     "db:create:test": "cross-env NODE_ENV=test npx sequelize-cli db:create",
-    "start": "node src/server.js",
-    "startdev": "nodemon src/server.js",
+    "start": "node src/index.js",
+    "startdev": "nodemon src/index.js",
     "migrate": "npx sequelize-cli db:migrate",
     "build": "webpack",
     "prod": "node dist/final.js"
