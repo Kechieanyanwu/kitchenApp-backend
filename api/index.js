@@ -13,18 +13,18 @@ app.use(express.urlencoded({ extended: true }));
 
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const { sequelize } = require('../../database/models');
+const { sequelize } = require('../database/models');
 
-const categoriesRouter = require('./routes/categoriesRouter'); 
-const checklistRouter = require('./routes/checklistRouter');
-const inventoryRouter = require('./routes/inventoryRouter'); 
-const userRouter = require('./routes/userRouter');
+const categoriesRouter = require('./src/routes/categoriesRouter'); 
+const checklistRouter = require('./src/routes/checklistRouter');
+const inventoryRouter = require('./src/routes/inventoryRouter'); 
+const userRouter = require('./src/routes/userRouter');
 
-const isAuth = require('../../utilities/auth/authMiddleware');
+const isAuth = require('../utilities/auth/authMiddleware');
 
 const passport = require('passport');
-const issueToken = require('../../utilities/auth/issueJWT');
-require('../../config/passport');
+const issueToken = require('../utilities/auth/issueJWT');
+require('../config/passport');
 
 
 const sessionStore = new SequelizeStore({

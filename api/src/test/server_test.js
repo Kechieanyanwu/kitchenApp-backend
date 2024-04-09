@@ -4,7 +4,7 @@
 const chai = require('chai');
 const chaiHttp = require("chai-http"); //included
 const assert = chai.assert;
-const { server } = require("../server"); 
+const { server } = require("../../index"); 
 
 
 // Model Imports 

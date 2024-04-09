@@ -1,7 +1,7 @@
 // Test framework Imports
 const chai = require('chai');
 const assert = chai.assert;
-const {app, server} = require("../server"); 
+const {app, server} = require("../../index"); 
 
 
 // Model Imports 
