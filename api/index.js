@@ -125,12 +125,18 @@ app.get('/logout', (req, res) => {
 
 
 
-const server = app.listen(PORT, () => { 
+// const server = app.listen(PORT, () => { 
+//     console.log(`Kitchen App is listening on port ${PORT}`);
+// });
+
+app.listen(PORT, () => { 
     console.log(`Kitchen App is listening on port ${PORT}`);
 });
 
 
-module.exports = {
-    app,
-    server,
-};
+// module.exports = {
+//     app,
+//     server,
+// };
+
+module.exports = app;
