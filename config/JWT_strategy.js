@@ -1,15 +1,12 @@
 /* eslint-disable no-undef */
 const passport = require('passport');
-// const fs = require('fs');
 const { User } = require('../database/models/user');
-// const path = require('path');
 require('dotenv').config();
 
 const jwtStrategy = require('passport-jwt').Strategy;
 const extractJWT = require('passport-jwt').ExtractJwt;
 
-// const pathToKey = path.join(__dirname, '../pemfiles/id_rsa_pub.pem');
-// const publicKey = fs.readFileSync(pathToKey, 'utf8');
+
 const publicKey = process.env.PUBLIC_KEY;
 
 const options = {
