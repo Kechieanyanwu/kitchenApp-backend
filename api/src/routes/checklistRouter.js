@@ -1,5 +1,5 @@
 const express = require('express');
-const checklistRouter = express.Router(); //creating a router instance 
+const checklistRouter = express.Router(); 
 const { getAllItems,
     getItem,
     addNewItem,
@@ -13,9 +13,11 @@ const isJWTAuth = require('../../../config/isJWTAuth'); //test
 
 const { Checklist } = require('../../../database/models/checklist'); 
 
+checklistRouter.use(isJWTAuth); //JWT authentication middleware 
+
 
 //get all checklist items
-checklistRouter.get('/', isJWTAuth, async (req, res, next) => {
+checklistRouter.get('/', async (req, res, next) => {
     let checklistArray;
     try {
         checklistArray = await getAllItems(Checklist); //based on ID

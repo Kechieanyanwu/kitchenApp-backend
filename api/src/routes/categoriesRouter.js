@@ -1,5 +1,5 @@
 const express = require('express');
-const categoriesRouter = express.Router(); //creating a router instance
+const categoriesRouter = express.Router();
 
 const { getAllItems,
     addNewItem,

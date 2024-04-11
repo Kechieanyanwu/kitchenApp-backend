@@ -1,4 +1,6 @@
-Welcome to the backend for KitchenApp, my WIP personal project to help me manage items in my kitchen inventory and stop buying duplicate items. As this is currently WIP, I have not included instructions for running on your machine. 
+Welcome to the backend for KitchenApp, my WIP personal project to help me manage items in my kitchen inventory and stop buying duplicate items. 
+
+This is currently in the process of being deployed on Vercel. For now, I have recorded a demo of the application here: [to insert link]. 
 
 KitchenApp is designed to facilitate the management of items typically found in a kitchen, such as groceries and other household supplies. Here's an overview of what the application will do:
 
