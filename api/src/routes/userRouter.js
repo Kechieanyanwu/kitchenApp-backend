@@ -6,10 +6,12 @@ const { validateNewUser } = require("../../../utilities/model");
 const { hashPassword }  = require("../../../utilities/password");
 const { addNewItem, deleteItem } = require('../controllers/controller');
 const { User } = require('../../../database/models/user');
+const isJWTAuth = require('../../../config/isJWTAuth');
 
+userRouter.use(jsonParser);
 
 // user register
-userRouter.post("/register", jsonParser, validateNewUser, async (req, res, next) => {
+userRouter.post("/register", validateNewUser, async (req, res, next) => {
 
     // to add a check for whether the email already exists so you can't have a duplicate user 
     const {hash, salt} = await hashPassword(req.password);
@@ -32,7 +34,7 @@ userRouter.post("/register", jsonParser, validateNewUser, async (req, res, next)
 })
 
 // user delete 
-userRouter.delete("/:itemID", jsonParser, async (req, res, next) => {
+userRouter.delete("/:itemID", isJWTAuth, async (req, res, next) => {
     const itemID = req.params.itemID;
     let updatedUsers;
 
