@@ -13,10 +13,6 @@ const isJWTAuth = require('../../../config/isJWTAuth'); //test
 
 const { Checklist } = require('../../../database/models/checklist'); 
 
-checklistRouter.use((req, res, next) => { //test
-    console.log('Logging headers before entering checklist route', req.headers);
-    next();
-});
 
 //get all checklist items
 checklistRouter.get('/', isJWTAuth, async (req, res, next) => {

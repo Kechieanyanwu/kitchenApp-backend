@@ -11,6 +11,8 @@ const customFields = {
 const verifyCallback = async (username, password, done) => {
     let user;
     let passwordIsEqual;
+    
+    console.log('In login verify callback'); //test
 
     try {
         user = await User.findOne({ where: { email: username } });
@@ -28,8 +30,10 @@ const verifyCallback = async (username, password, done) => {
             done(err);
         }
         if (passwordIsEqual) {
+            console.log('you have a user'); //test
             return done(null, user);
         } else {
+            console.log('you don\'t have a user'); //test
             return done(null, false);
         }
     }
