@@ -1,16 +1,20 @@
 const express = require('express');
-const categoriesRouter = express.Router(); //creating a router instance
+const categoriesRouter = express.Router();
 
 const { getAllItems,
     addNewItem,
     getItem,
     updateItem,
     deleteItem } = require('../controllers/controller');
+
 const { validateNewCategory } = require('../../../utilities/model');
 const bodyParser = require('body-parser');
 const { Category } = require('../../../database/models/category');
+const isJWTAuth = require('../../../config/isJWTAuth');
 
 const jsonParser = bodyParser.json(); //used only in specific routes
+
+categoriesRouter.use(isJWTAuth);
 
 //get all categories
 categoriesRouter.get('/', async (req, res, next) => {
@@ -96,7 +100,7 @@ categoriesRouter.delete('/:itemID', jsonParser, async (req, res, next) => {
 });
 
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res) => {
     res.status(err.status).send(err.message);
 };
 

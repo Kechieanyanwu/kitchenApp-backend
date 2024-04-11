@@ -47,11 +47,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-app.use((req, res, next) => {
-    console.log(req.session);
-    console.log(req.user);
-    next();
-});
+// app.use((req, res, next) => {
+//     console.log(req.session);
+//     console.log(req.user);
+//     next();
+// });
 
 
 
@@ -70,11 +70,12 @@ app.post('/login', passport.authenticate('local', { failureRedirect: '/login-fai
     // const tokenObject = issueToken(req.user);
     const tokenObject = issueToken(req.user.dataValues.id);
     const expiry = new Date(tokenObject.expires * 1000);
-    console.log('Post route token: ', tokenObject, 'Expiry: ', expiry);
+    // console.log('Post route token: ', tokenObject, 'Expiry: ', expiry);
 
     res.status(200);    
     res.cookie('auth_token', tokenObject.token, { expires: expiry, httpOnly: true, secure: true });
-    res.redirect('/login-success');
+    res.send('<h1> You\'ve successfully logged in</h1>');
+    // res.redirect('/login-success'); //uncomment when loom recording
 });
 
 app.get('/login', async (req, res) => {
@@ -108,7 +109,7 @@ app.get('/login-success', (req, res) => {
 });
 
 app.get('/login-failure', (req, res) => {
-    res.send('You entered the wrong email or password.');
+    res.status(401).send('You entered the wrong email or password.');
 });
 
 

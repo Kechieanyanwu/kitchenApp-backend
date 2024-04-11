@@ -2,7 +2,7 @@
 require('dotenv').config();
 const pg = require('pg'); 
 
-console.log('process.env: ', process.env);
+// console.log('process.env: ', process.env);
 
 module.exports = {
     development: {

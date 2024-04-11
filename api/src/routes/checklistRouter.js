@@ -1,25 +1,25 @@
 const express = require('express');
-const checklistRouter = express.Router(); //creating a router instance 
+const checklistRouter = express.Router(); 
+
 const { getAllItems,
     getItem,
     addNewItem,
     updateItem,
     deleteItem,
     moveCheckedItem } = require('../controllers/controller');
+
 const { validateNewGroceryItem } = require('../../../utilities/model');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json(); //used only in specific routes
-const isJWTAuth = require('../../../config/isJWTAuth'); //test
+const isJWTAuth = require('../../../config/isJWTAuth');
 
 const { Checklist } = require('../../../database/models/checklist'); 
 
-checklistRouter.use((req, res, next) => { //test
-    console.log('Logging headers before entering checklist route', req.headers);
-    next();
-});
+checklistRouter.use(isJWTAuth); 
+
 
 //get all checklist items
-checklistRouter.get('/', isJWTAuth, async (req, res, next) => {
+checklistRouter.get('/', async (req, res, next) => {
     let checklistArray;
     try {
         checklistArray = await getAllItems(Checklist); //based on ID

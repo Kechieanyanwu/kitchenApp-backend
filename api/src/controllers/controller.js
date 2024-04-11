@@ -1,9 +1,9 @@
 // Model and Sequelize Imports
-const { sequelize } = require("../../../database/models"); 
-const { Checklist } = require("../../../database/models/checklist");
-const { Inventory } = require("../../../database/models/inventory");
-const { nonExistentItemError } = require("../../../utilities/errors");
-const { validateID } = require("../../../utilities/model");
+const { sequelize } = require('../../../database/models'); 
+const { Checklist } = require('../../../database/models/checklist');
+const { Inventory } = require('../../../database/models/inventory');
+const { nonExistentItemError } = require('../../../utilities/errors');
+const { validateID } = require('../../../utilities/model');
 
 
 // to be modified to filter by user
@@ -23,12 +23,12 @@ const getAllItems = async (modelName, userID, t) => { //modified for a user
     //     throw error;
     // }
     // return items;
-        try {
-            const items = await modelName.findAll(
+    try {
+        const items = await modelName.findAll(
             // { raw: true, transaction: t }); 
-            { raw: true, attributes: {exclude: ["date_created", "date_updated"]}, transaction: t }); 
+            { raw: true, attributes: {exclude: ['date_created', 'date_updated']}, transaction: t }); 
             // { transaction: t }); 
-            return items;
+        return items;
     } catch (error) {
         throw error;
     }
@@ -38,14 +38,14 @@ const getAllItems = async (modelName, userID, t) => { //modified for a user
 
 const getItem = async (modelName, itemID, t) => {
     try{
-            const requestedItem = await modelName.findByPk(itemID, 
-                { attributes: {exclude: ["date_created", "date_updated"]},
+        const requestedItem = await modelName.findByPk(itemID, 
+            { attributes: {exclude: ['date_created', 'date_updated']},
                 transaction: t })
-            if (requestedItem === null) {
-                throw nonExistentItemError;
-            } else {
-                return requestedItem.dataValues;
-            }
+        if (requestedItem === null) {
+            throw nonExistentItemError;
+        } else {
+            return requestedItem.dataValues;
+        }
     } catch (err) {
         throw err;
     }
@@ -83,7 +83,7 @@ const addNewItem = async(modelName, newItem, t) => { //update to include userID
         delete addedItem.dataValues.date_created;
         delete addedItem.dataValues.date_updated;
 
-        if (modelName.name == "User") {
+        if (modelName.name == 'User') {
             delete addedItem.dataValues.hashed_password;
             delete addedItem.dataValues.salt;
         }
@@ -125,11 +125,11 @@ const deleteItem = async (modelName, itemID, t) => {
 
     await item.destroy({ transaction: t });
 
-    if (modelName.name != "User") { // not returning an array of users for privacy sake
+    if (modelName.name != 'User') { // not returning an array of users for privacy sake
         const items = await modelName.findAll(
             {
                 raw: true,
-                attributes: { exclude: ["date_created", "date_updated"] },
+                attributes: { exclude: ['date_created', 'date_updated'] },
                 transaction: t
             });
         return items; 
@@ -158,8 +158,8 @@ const moveCheckedItem = async (itemID, t) => {
     await Checklist.destroy({ where: { id: itemID }, transaction: t })
     
     const updatedChecklist = await Checklist.findAll(
-        { attributes: { exclude: ["date_created", "date_updated"] }, 
-        transaction: t });
+        { attributes: { exclude: ['date_created', 'date_updated'] }, 
+            transaction: t });
 
     return updatedChecklist;
 }
@@ -172,4 +172,4 @@ module.exports = {
     updateItem,
     deleteItem,
     moveCheckedItem,
- };
+};
