@@ -1,8 +1,6 @@
-Welcome to the backend for KitchenApp, my WIP personal project to help me manage items in my kitchen inventory and stop buying duplicate items. 
+Deployment Update: The application is in the process of being deployed on Vercel and is currently operational in a local environment. A comprehensive demo is being prepared and will be made available via a shared link by the end of this week, April 14th.
 
-This is currently in the process of being deployed on Vercel. For now, I have recorded a demo of the application here: [to insert link]. 
-
-KitchenApp is designed to facilitate the management of items typically found in a kitchen, such as groceries and other household supplies. Here's an overview of what the application will do:
+Welcome to the backend for KitchenApp, my WIP personal project to help me manage items in my kitchen inventory and stop buying duplicate items. KitchenApp is designed to facilitate the management of items typically found in a kitchen, such as groceries and other household supplies. Here's an overview of what the application will do:
 
 1. **Checklist Management**:
    - Users can create and maintain a checklist of items they need to purchase.
