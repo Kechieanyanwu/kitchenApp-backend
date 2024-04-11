@@ -31,12 +31,7 @@ chai.use(chaiHttp); //for handling http responses
 
 // Beginning of tests
 describe('KitchenApp testing', function () {
-//    // let agent = chai.request.agent(server); //using chai agent because I want all the requests to go in one session, not in several sessions
-
-    //     after(() => {
-    //         agent.close();
-    //     });
-    
+  
     describe('Endpoint testing', () => {
         describe('Unauthenticated Requests', async () => {
             let agent;
@@ -58,6 +53,40 @@ describe('KitchenApp testing', function () {
                 console.log(response.text); //change to assertion on error message                                
                 assert.equal(response.status, 401);
             });
+
+            describe('GET Endpoint testing', () => { 
+                const endpoints = [
+                    {
+                        name: 'Categories',
+                        path: '/categories',
+                        schema: categoriesSchema,
+                    },
+                    {
+                        name: 'Checklist',
+                        path: '/checklist',
+                        schema: checklistSchema,
+                    },
+                    {
+                        name: 'Inventory',
+                        path: '/inventory',
+                        schema: inventorySchema,
+                    },
+                ];
+        
+                for (const endpoint of endpoints) {
+                    describe(`${endpoint.name}`, () => {
+                        it('sends a 401 code on an unauthenticated request' , async () => {
+                        
+                            const response = await agent.get(endpoint.path); 
+                            console.log(response.text);
+
+                            assert.equal(response.status, 401);
+                    
+                        });
+                    });
+                }
+            });
+
             //to include other calls to endpoints
             after( async () => {
                 agent.close();
@@ -71,6 +100,10 @@ describe('KitchenApp testing', function () {
             
             before( async () => {
                 agent = chai.request.agent(server); //using chai agent because I want all the requests to go in one session, not in several sessions
+            });
+
+            after( async () => {
+                agent.close();
             });
             
             describe('Login flow', () => {
@@ -122,7 +155,6 @@ describe('KitchenApp testing', function () {
                     for (const endpoint of endpoints) {
                         describe(`${endpoint.name}`, () => {
                             it('sends a 200 code on a good request' , async () => {
-    
                             
                                 const response = await agent.get(endpoint.path).set('Authorization', auth_token); //just added 
                                 console.log(response.body);//test

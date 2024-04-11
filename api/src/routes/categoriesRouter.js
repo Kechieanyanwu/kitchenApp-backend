@@ -6,11 +6,15 @@ const { getAllItems,
     getItem,
     updateItem,
     deleteItem } = require('../controllers/controller');
+
 const { validateNewCategory } = require('../../../utilities/model');
 const bodyParser = require('body-parser');
 const { Category } = require('../../../database/models/category');
+const isJWTAuth = require('../../../config/isJWTAuth');
 
 const jsonParser = bodyParser.json(); //used only in specific routes
+
+categoriesRouter.use(isJWTAuth);
 
 //get all categories
 categoriesRouter.get('/', async (req, res, next) => {

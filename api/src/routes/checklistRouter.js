@@ -1,19 +1,21 @@
 const express = require('express');
 const checklistRouter = express.Router(); 
+
 const { getAllItems,
     getItem,
     addNewItem,
     updateItem,
     deleteItem,
     moveCheckedItem } = require('../controllers/controller');
+
 const { validateNewGroceryItem } = require('../../../utilities/model');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json(); //used only in specific routes
-const isJWTAuth = require('../../../config/isJWTAuth'); //test
+const isJWTAuth = require('../../../config/isJWTAuth');
 
 const { Checklist } = require('../../../database/models/checklist'); 
 
-checklistRouter.use(isJWTAuth); //JWT authentication middleware 
+checklistRouter.use(isJWTAuth); 
 
 
 //get all checklist items

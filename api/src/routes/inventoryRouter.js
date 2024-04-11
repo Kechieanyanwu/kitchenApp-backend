@@ -9,7 +9,9 @@ const { validateNewGroceryItem } = require("../../../utilities/model");
 const bodyParser = require("body-parser");
 const { Inventory } = require('../../../database/models/inventory');
 const jsonParser = bodyParser.json(); //used only in specific routes
+const isJWTAuth = require('../../../config/isJWTAuth');
 
+inventoryRouter.use(isJWTAuth);
 
 //get all inventory items
 inventoryRouter.get("/", async (req, res, next) => {
