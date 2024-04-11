@@ -100,7 +100,7 @@ categoriesRouter.delete('/:itemID', jsonParser, async (req, res, next) => {
 });
 
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res) => {
     res.status(err.status).send(err.message);
 };
 
