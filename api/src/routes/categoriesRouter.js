@@ -11,14 +11,18 @@ const { validateNewCategory } = require('../../../utilities/model');
 const bodyParser = require('body-parser');
 const { Category } = require('../../../database/models/category');
 const isJWTAuth = require('../../../config/isJWTAuth');
+const populateUser = require('../../../utilities/user');
 
 const jsonParser = bodyParser.json(); //used only in specific routes
 
 categoriesRouter.use(isJWTAuth);
+categoriesRouter.use(populateUser);
+//to include middleware that adds the req.user.dataValues.id to req.userId;
 
 //get all categories
 categoriesRouter.get('/', async (req, res, next) => {
     let categoriesArray;
+    console.log('User Id as populated by the middleware is', req.userId); //test
     try {
         categoriesArray = await getAllItems(Category); 
     } catch (err) {

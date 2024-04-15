@@ -12,10 +12,12 @@ const { validateNewGroceryItem } = require('../../../utilities/model');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json(); //used only in specific routes
 const isJWTAuth = require('../../../config/isJWTAuth');
+const populateUser = require('../../../utilities/user');
 
 const { Checklist } = require('../../../database/models/checklist'); 
 
 checklistRouter.use(isJWTAuth); 
+checklistRouter.use(populateUser); 
 
 
 //get all checklist items

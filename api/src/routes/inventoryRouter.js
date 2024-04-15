@@ -10,8 +10,10 @@ const bodyParser = require('body-parser');
 const { Inventory } = require('../../../database/models/inventory');
 const jsonParser = bodyParser.json(); //used only in specific routes
 const isJWTAuth = require('../../../config/isJWTAuth');
+const populateUser = require('../../../utilities/user');
 
 inventoryRouter.use(isJWTAuth);
+inventoryRouter.use(populateUser);
 
 //get all inventory items
 inventoryRouter.get('/', async (req, res, next) => {
