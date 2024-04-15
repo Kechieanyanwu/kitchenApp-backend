@@ -1,7 +1,7 @@
 const express = require('express');
 const inventoryRouter = express.Router(); //creating a router instance
-const { getAllItems,
-    getItem,
+const { 
+    getAllItems,
     addNewItem,
     updateItem,
     deleteItem } = require('../controllers/controller');

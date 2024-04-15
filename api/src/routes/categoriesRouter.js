@@ -1,9 +1,9 @@
 const express = require('express');
 const categoriesRouter = express.Router();
 
-const { getAllItems,
+const { 
+    getAllItems,
     addNewItem,
-    getItem,
     updateItem,
     deleteItem } = require('../controllers/controller');
 

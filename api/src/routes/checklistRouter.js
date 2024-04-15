@@ -1,8 +1,8 @@
 const express = require('express');
 const checklistRouter = express.Router(); 
 
-const { getAllItems,
-    getItem,
+const { 
+    getAllItems,
     addNewItem,
     updateItem,
     deleteItem,
