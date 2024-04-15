@@ -24,18 +24,6 @@ inventoryRouter.get('/', async (req, res, next) => {
     res.status(200).json(inventoryArray);
 });
 
-//get specific inventory item
-inventoryRouter.get('/:itemID', async (req, res, next) => {
-    const itemID = req.params.itemID;
-    let item;
-    try {
-        item = await getItem(Inventory, itemID); //testing sending no transaction T
-    } catch (err) {
-        err.status = 400;
-        next(err);
-    }
-    res.status(200).send(item);
-});
 
 //add new inventory item
 inventoryRouter.post('/', jsonParser, validateNewGroceryItem, async (req, res, next) => {

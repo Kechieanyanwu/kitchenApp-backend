@@ -29,18 +29,6 @@ checklistRouter.get('/', async (req, res, next) => {
     res.status(200).json(checklistArray);
 });
 
-//get specific item
-checklistRouter.get('/:itemID', async (req, res, next) => {
-    const itemID = req.params.itemID;
-    let item; 
-    try {
-        item = await getItem(Checklist, itemID);
-    } catch (err) {
-        err.status = 400;
-        next(err);
-    }
-    res.status(200).send(item);
-});
 
 //add new checklist item
 checklistRouter.post('/', jsonParser, validateNewGroceryItem, async (req, res, next) => {

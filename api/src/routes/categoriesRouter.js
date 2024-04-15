@@ -27,18 +27,6 @@ categoriesRouter.get('/', async (req, res, next) => {
     res.status(200).json(categoriesArray);
 });
 
-//get specific category
-categoriesRouter.get('/:itemID', async (req, res, next) => {
-    const itemID = req.params.itemID;
-    let category;
-    try {
-        category = await getItem(Category, itemID); //testing sending no transaction T
-    } catch (err) {
-        err.status = 400;
-        next(err);
-    }
-    res.status(200).send(category);
-});
 
 
 //add new category
@@ -101,6 +89,7 @@ categoriesRouter.delete('/:itemID', jsonParser, async (req, res, next) => {
 
 
 const errorHandler = (err, req, res) => {
+    console.log('in categories error handler'); //test
     res.status(err.status).send(err.message);
 };
 
