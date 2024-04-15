@@ -1,9 +1,9 @@
 const express = require('express');
 const categoriesRouter = express.Router();
 
-const { getAllItems,
+const { 
+    getAllItems,
     addNewItem,
-    getItem,
     updateItem,
     deleteItem } = require('../controllers/controller');
 
@@ -11,14 +11,18 @@ const { validateNewCategory } = require('../../../utilities/model');
 const bodyParser = require('body-parser');
 const { Category } = require('../../../database/models/category');
 const isJWTAuth = require('../../../config/isJWTAuth');
+const populateUser = require('../../../utilities/user');
 
 const jsonParser = bodyParser.json(); //used only in specific routes
 
 categoriesRouter.use(isJWTAuth);
+categoriesRouter.use(populateUser);
+//to include middleware that adds the req.user.dataValues.id to req.userId;
 
 //get all categories
 categoriesRouter.get('/', async (req, res, next) => {
     let categoriesArray;
+    console.log('User Id as populated by the middleware is', req.userId); //test
     try {
         categoriesArray = await getAllItems(Category); 
     } catch (err) {
@@ -27,18 +31,6 @@ categoriesRouter.get('/', async (req, res, next) => {
     res.status(200).json(categoriesArray);
 });
 
-//get specific category
-categoriesRouter.get('/:itemID', async (req, res, next) => {
-    const itemID = req.params.itemID;
-    let category;
-    try {
-        category = await getItem(Category, itemID); //testing sending no transaction T
-    } catch (err) {
-        err.status = 400;
-        next(err);
-    }
-    res.status(200).send(category);
-});
 
 
 //add new category
@@ -101,6 +93,7 @@ categoriesRouter.delete('/:itemID', jsonParser, async (req, res, next) => {
 
 
 const errorHandler = (err, req, res) => {
+    console.log('in categories error handler'); //test
     res.status(err.status).send(err.message);
 };
 

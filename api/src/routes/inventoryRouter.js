@@ -1,7 +1,7 @@
 const express = require('express');
 const inventoryRouter = express.Router(); //creating a router instance
-const { getAllItems,
-    getItem,
+const { 
+    getAllItems,
     addNewItem,
     updateItem,
     deleteItem } = require('../controllers/controller');
@@ -10,8 +10,10 @@ const bodyParser = require('body-parser');
 const { Inventory } = require('../../../database/models/inventory');
 const jsonParser = bodyParser.json(); //used only in specific routes
 const isJWTAuth = require('../../../config/isJWTAuth');
+const populateUser = require('../../../utilities/user');
 
 inventoryRouter.use(isJWTAuth);
+inventoryRouter.use(populateUser);
 
 //get all inventory items
 inventoryRouter.get('/', async (req, res, next) => {
@@ -24,18 +26,6 @@ inventoryRouter.get('/', async (req, res, next) => {
     res.status(200).json(inventoryArray);
 });
 
-//get specific inventory item
-inventoryRouter.get('/:itemID', async (req, res, next) => {
-    const itemID = req.params.itemID;
-    let item;
-    try {
-        item = await getItem(Inventory, itemID); //testing sending no transaction T
-    } catch (err) {
-        err.status = 400;
-        next(err);
-    }
-    res.status(200).send(item);
-});
 
 //add new inventory item
 inventoryRouter.post('/', jsonParser, validateNewGroceryItem, async (req, res, next) => {

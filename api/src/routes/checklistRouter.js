@@ -1,8 +1,8 @@
 const express = require('express');
 const checklistRouter = express.Router(); 
 
-const { getAllItems,
-    getItem,
+const { 
+    getAllItems,
     addNewItem,
     updateItem,
     deleteItem,
@@ -12,10 +12,12 @@ const { validateNewGroceryItem } = require('../../../utilities/model');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json(); //used only in specific routes
 const isJWTAuth = require('../../../config/isJWTAuth');
+const populateUser = require('../../../utilities/user');
 
 const { Checklist } = require('../../../database/models/checklist'); 
 
 checklistRouter.use(isJWTAuth); 
+checklistRouter.use(populateUser); 
 
 
 //get all checklist items
@@ -29,18 +31,6 @@ checklistRouter.get('/', async (req, res, next) => {
     res.status(200).json(checklistArray);
 });
 
-//get specific item
-checklistRouter.get('/:itemID', async (req, res, next) => {
-    const itemID = req.params.itemID;
-    let item; 
-    try {
-        item = await getItem(Checklist, itemID);
-    } catch (err) {
-        err.status = 400;
-        next(err);
-    }
-    res.status(200).send(item);
-});
 
 //add new checklist item
 checklistRouter.post('/', jsonParser, validateNewGroceryItem, async (req, res, next) => {
