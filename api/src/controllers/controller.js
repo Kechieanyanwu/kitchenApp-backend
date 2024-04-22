@@ -5,76 +5,53 @@ const { Inventory } = require('../../../database/models/inventory');
 const { nonExistentItemError } = require('../../../utilities/errors');
 const { validateID } = require('../../../utilities/model');
 
-
-// to be modified to filter by user
-
-// Beginning of functions
-const getAllItems = async (modelName, userID, t) => { //modified for a user
-    // let items
-    // try {
-    //     const items = await modelName.findAll({
-    //         where: {
-    //             user_id: userID
-    //         }
-    //     },
-    //     { raw: true, attributes: { exclude: ["date_created", "date_updated"] }, transaction: t });
-
-    // } catch (error) {
-    //     throw error;
-    // }
-    // return items;
-    try {
-        const items = await modelName.findAll(
-            // { raw: true, transaction: t }); 
-            { raw: true, attributes: {exclude: ['date_created', 'date_updated']}, transaction: t }); 
-            // { transaction: t }); 
-        return items;
-    } catch (error) {
-        throw error;
-    }
-}
+const getAllItems = async (modelName, userID, t) => { 
+    const items = await modelName.findAll({
+        where: { user_id: userID }
+    },
+    { raw: true, attributes: { exclude: ['date_created', 'date_updated'] }, transaction: t });
+    return items;
+};
 
 
 
-const getItem = async (modelName, itemID, t) => {
+// const getItem = async (modelName, itemID, t) => {
+//     const requestedItem = await modelName.findByPk(itemID, 
+//         { attributes: { exclude: ['date_created', 'date_updated'] },
+//             transaction: t });
+//     if (requestedItem === null) {
+//         throw nonExistentItemError;
+//     } else {
+//         return requestedItem.dataValues;
+//     }
+// };
+
+// // to be modified to filter by user
+const getItem = async (modelName, itemID, userID, t) => { //modify so you return the requested item outside of the try-catch thing
     try{
         const requestedItem = await modelName.findByPk(itemID, 
-            { attributes: {exclude: ['date_created', 'date_updated']},
-                transaction: t })
+            {
+                where: {
+                    user_id: userID
+                }
+            }, 
+            { transaction: t })
         if (requestedItem === null) {
             throw nonExistentItemError;
         } else {
+            delete requestedItem.dataValues.date_created;
+            delete requestedItem.dataValues.date_updated;
             return requestedItem.dataValues;
         }
+
     } catch (err) {
         throw err;
     }
 }
 
-// const getItem = async (modelName, itemID, userID, t) => { //modify so you return the requested item outside of the try-catch thing
-//     try{
-//         const requestedItem = await modelName.findByPk(itemID, 
-//             {
-//                 where: {
-//                     user_id: userID
-//                 }
-//             }, 
-//             { transaction: t })
-//         if (requestedItem === null) {
-//             throw nonExistentItemError;
-//         } else {
-//             delete requestedItem.dataValues.date_created;
-//             delete requestedItem.dataValues.date_updated;
-//             return requestedItem.dataValues;
-//         }
-
-//     } catch (err) {
-//         throw err;
-//     }
-// }
-
 
 const addNewItem = async(modelName, newItem, t) => { //update to include userID
+    console.log('in add new item'); //test
     try {
         const addedItem = await modelName.create(newItem,
             { transaction: t });
@@ -88,13 +65,14 @@ const addNewItem = async(modelName, newItem, t) => { //update to include userID
             delete addedItem.dataValues.salt;
         }
 
-        // return new item
-        return addedItem.dataValues
+        console.log('Added items', addedItem.dataValues); //test
+        return addedItem.dataValues;
 
     } catch (err) {
+        console.log(err); //test
         throw err;
     }
-}
+};
 
 const updateItem = async(modelName, itemID, desiredUpdate, t) => { 
     let item;

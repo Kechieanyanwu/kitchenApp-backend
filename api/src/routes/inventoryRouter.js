@@ -6,9 +6,8 @@ const {
     updateItem,
     deleteItem } = require('../controllers/controller');
 const { validateNewGroceryItem } = require('../../../utilities/model');
-const bodyParser = require('body-parser');
 const { Inventory } = require('../../../database/models/inventory');
-const jsonParser = bodyParser.json(); //used only in specific routes
+inventoryRouter.use(express.json()); 
 const isJWTAuth = require('../../../config/isJWTAuth');
 const populateUser = require('../../../utilities/user');
 
@@ -19,7 +18,7 @@ inventoryRouter.use(populateUser);
 inventoryRouter.get('/', async (req, res, next) => {
     let inventoryArray;
     try {
-        inventoryArray = await getAllItems(Inventory);
+        inventoryArray = await getAllItems(Inventory, req.userId);
     } catch (err) {
         next(err); //validate that all errs have message and status 
     }
@@ -28,10 +27,10 @@ inventoryRouter.get('/', async (req, res, next) => {
 
 
 //add new inventory item
-inventoryRouter.post('/', jsonParser, validateNewGroceryItem, async (req, res, next) => {
+inventoryRouter.post('/', validateNewGroceryItem, async (req, res, next) => {
     let addedItem;
 
-    const newItem = { item_name: req.item_name, quantity: req.quantity, category_id: req.category_id, user_id: req.user_id };
+    const newItem = { item_name: req.item_name, quantity: req.quantity, category_id: req.category_id, user_id: req.userId };
 
     try {
         addedItem = await addNewItem(Inventory, newItem);
@@ -43,7 +42,7 @@ inventoryRouter.post('/', jsonParser, validateNewGroceryItem, async (req, res, n
 });
 
 //update existing inventory item
-inventoryRouter.put('/:itemID', jsonParser, async (req, res, next) => {
+inventoryRouter.put('/:itemID', async (req, res, next) => {
     const itemID = req.params.itemID; //code smell, could use a general router.params thingy
     const update = req.body;
     let updatedItem;
@@ -58,7 +57,7 @@ inventoryRouter.put('/:itemID', jsonParser, async (req, res, next) => {
 
 });
 
-inventoryRouter.delete('/:itemID', jsonParser, async (req, res, next) => {
+inventoryRouter.delete('/:itemID', async (req, res, next) => {
 
     const itemID = req.params.itemID;
     let updatedInventory;

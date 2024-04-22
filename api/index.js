@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 
-//is it okay to login and have a session, and afterwards, while verifying with JWT, to have no session and be stateless?
 require('dotenv').config();
 const express = require('express');
 const app = express();
@@ -54,28 +53,22 @@ app.use(passport.session());
 // });
 
 
-
-// categoriesRouter.use(isJWTAuth);
-// checklistRouter.use(isJWTAuth);
-// inventoryRouter.use(isJWTAuth);
-
 app.use('/categories', categoriesRouter);
 app.use('/checklist', checklistRouter);
 app.use('/inventory', inventoryRouter);
 app.use('/user', userRouter);
 
 
-// app.post("/login", passport.authenticate("local", { failureRedirect: '/login-failure', successRedirect: 'login-success' }), (req, res) => { could use only failureRedirect
 app.post('/login', passport.authenticate('local', { failureRedirect: '/login-failure' }), (req, res) => {
-    // const tokenObject = issueToken(req.user);
     const tokenObject = issueToken(req.user.dataValues.id);
     const expiry = new Date(tokenObject.expires * 1000);
-    // console.log('Post route token: ', tokenObject, 'Expiry: ', expiry);
-
     res.status(200);    
+
+    //sending as a cookie for testing and in the body for frontend
     res.cookie('auth_token', tokenObject.token, { expires: expiry, httpOnly: true, secure: true });
-    res.send('<h1> You\'ve successfully logged in</h1>');
-    // res.redirect('/login-success'); //uncomment when loom recording
+    res.json({
+        auth_token: tokenObject.token
+    });
 });
 
 app.get('/login', async (req, res) => {
@@ -91,18 +84,13 @@ app.get('/login', async (req, res) => {
     );
 });
 
+
 app.get('/protected-route', isAuth, (req, res) => {
     res.send(`
             <h1>You made it to the route.</h1><br>
             <a href="/logout">Logout</a>`);
 });
 
-
-// app.get('/protected-route', passport.authenticate('jwt', { session: false }), (req, res) => {
-//     res.send(`
-//             <h1>You made it to the route.</h1><br>
-//             <a href="/logout">Logout</a>`);
-// });
 
 app.get('/login-success', (req, res) => {
     res.send('<p>You successfully logged in. --> <a href="/protected-route">Go to protected route</a></p>');

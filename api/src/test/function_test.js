@@ -33,13 +33,13 @@ chai.use(require('chai-as-promised')); //extends chai to handle promises
 //             await t.commit();
 //         })
 
-//         describe('GetAllItems', async () => { //modifying to include user
-//             it('returns all items from a user\'s database', async () => {
-//                 const userID = 1;
-//                 const categoriesArray = await getAllItems(Category, userID, t);
-//                 assert.jsonSchema(categoriesArray, categoriesSchema);
-//             })
-//         });
+        // describe('GetAllItems', async () => { //modifying to include user
+        //     it('returns all items from a user\'s database', async () => {
+        //         const userID = 1;
+        //         const categoriesArray = await getAllItems(Category, userID, t);
+        //         assert.jsonSchema(categoriesArray, categoriesSchema);
+        //     })
+        // });
 
 //         describe('Get Item', async () => {
 //             it('returns the requested item specified by ID', async () => {
@@ -65,21 +65,21 @@ chai.use(require('chai-as-promised')); //extends chai to handle promises
 //             })
 //         })
 
-//         describe('addNewItem', async () => { 
-//             it('returns the newly added item', async () => {
-//                 const mockAddedItem = { id: 7, category_name: 'addNewItem test category', user_id: 1};
+        // describe('addNewItem', async () => { 
+        //     it('returns the newly added item', async () => {
+        //         const mockAddedItem = { id: 7, category_name: 'addNewItem test category', user_id: 1};
 
-//                 //create dummy data
-//                 const mockRequestBody = { 'category_name': 'addNewItem test category', user_id: 1 }
+        //         //create dummy data
+        //         const mockRequestBody = { 'category_name': 'addNewItem test category', user_id: 1 }
 
-//                 //send to database using function
-//                 const newItem = await addNewItem(Category, mockRequestBody, t);
+        //         //send to database using function
+        //         const newItem = await addNewItem(Category, mockRequestBody, t);
 
-//                 //validate that the request was fulfilled
-//                 assert.deepEqual(newItem, mockAddedItem); 
+        //         //validate that the request was fulfilled
+        //         assert.deepEqual(newItem, mockAddedItem); 
 
-//             });
-//         });
+        //     });
+        // });
         
 //         describe('UpdateItem', async () => {
 
