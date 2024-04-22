@@ -160,8 +160,8 @@ describe('KitchenApp testing', function () {
                     //assert that response headers sets an authentication cookie 
                     chai.expect(response.headers['set-cookie']).to.be.an('array');
                     chai.expect(response.headers['set-cookie'][0]).to.include('auth_token=');
+                    
                     // set authentication 
-
                     const cookie = response.headers['set-cookie'][0];
                     const matches = cookie.match(/auth_token=(Bearer%20[^\;]+)/);
                     const authTokenEncoded = matches ? matches[1] : null;
@@ -226,13 +226,13 @@ describe('KitchenApp testing', function () {
                                     expectedStatus: 400,
                                     expectedError: 'Empty Body'
                                 }, 
-                                // {
-                                //     requestType: 'Bad',
-                                //     description: 'rejects a request body with an incorrect schema',
-                                //     requestBody: { 'inventory': 'Dairy' },
-                                //     expectedStatus: 400,
-                                //     expectedError: incompleteCategoryError.message
-                                // }
+                                {
+                                    requestType: 'Bad',
+                                    description: 'rejects a request body with an incorrect schema',
+                                    requestBody: { 'inventory': 'Dairy' },
+                                    expectedStatus: 400,
+                                    expectedError: 'There must be a field, Category name, which must be a string'
+                                }
                             ]
                         },
                         {
@@ -264,13 +264,13 @@ describe('KitchenApp testing', function () {
                                     expectedStatus: 400,
                                     expectedError: 'Empty Body'
                                 }, 
-                                // {
-                                //     requestType: 'Bad',
-                                //     description: 'rejects a request body with an incorrect schema',
-                                //     requestBody: { 'inventory': 'Dairy' },
-                                //     expectedStatus: 400,
-                                //     expectedError: incompleteItemError.message
-                                // },
+                                {
+                                    requestType: 'Bad',
+                                    description: 'rejects a request body with an incorrect schema',
+                                    requestBody: { 'inventory': 'Dairy' },
+                                    expectedStatus: 400,
+                                    expectedError: incompleteItemError.message
+                                },
                             ]
                         },
                         {
@@ -301,51 +301,15 @@ describe('KitchenApp testing', function () {
                                     expectedStatus: 400,
                                     expectedError: 'Empty Body'
                                 }, 
-                                // {
-                                //     requestType: 'Bad',
-                                //     description: 'rejects a request body with an incorrect schema',
-                                //     requestBody: { 'inventory': 'Dairy' },
-                                //     expectedStatus: 400,
-                                //     expectedError: incompleteItemError.message
-                                // },
+                                {
+                                    requestType: 'Bad',
+                                    description: 'rejects a request body with an incorrect schema',
+                                    requestBody: { 'inventory': 'Dairy' },
+                                    expectedStatus: 400,
+                                    expectedError: incompleteItemError.message
+                                },
                             ]
-                        },
-                        // working here to update to User
-                        // {
-                        //     name: 'User',
-                        //     route: '/user/register',
-                        //     testCases: [
-                        //         {
-                        //             requestType: 'Good',
-                        //             description: 'responds with 201 to a valid request body',  
-                        //             requestBody: {
-                        //                 email: 'serverTest@gmail.com',
-                        //                 username: 'Server Test',
-                        //                 password: 'johnnytest'
-                        //             },
-                        //             expectedStatus: 201,
-                        //             expectedResponse: {
-                        //                 id: 2,
-                        //                 email: 'serverTest@gmail.com',
-                        //                 username: 'Server Test',
-                        //             },
-                        //         },
-                        //         {
-                        //             requestType: 'Bad', 
-                        //             description: 'rejects an empty request body',  
-                        //             requestBody: undefined,
-                        //             expectedStatus: 400,
-                        //             expectedError: 'Empty Body'
-                        //         }, 
-                        //         // {
-                        //         //     requestType: 'Bad', //to update
-                        //         //     description: 'rejects a request body with an incorrect schema',
-                        //         //     requestBody: { 'email': 'Dairy' },
-                        //         //     expectedStatus: 400,
-                        //         //     expectedError: incompleteUserError.message
-                        //         // },
-                        //     ]
-                        // }
+                        }
                     ];
                 
                     endpoints.forEach((endpoint) => {
@@ -359,7 +323,9 @@ describe('KitchenApp testing', function () {
                                     if (requestType == 'Good') {
                                         assert.deepEqual(response.body, expectedResponse);
                                     } else {
-                                        assert.include(response.error.text, expectedError, 'object contains error');
+                                        if (expectedError) {
+                                            assert.include(response.error.text, expectedError, 'object contains error');
+                                        }
                                     }
                                 });
                             });

@@ -52,7 +52,7 @@ const validateNewCategory = (req, res, next) => {
             req.category_name = req.body.category_name;
             next();
         } else {
-            const err = new Error('Category name must be a string'); 
+            const err = new Error('There must be a field, Category name, which must be a string'); 
             console.log(err); //test
             err.status = 400;
             next(err);
