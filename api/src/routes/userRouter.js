@@ -1,15 +1,12 @@
 const express = require('express');
 const userRouter = express.Router();
-const bodyParser = require('body-parser');
-const jsonParser = bodyParser.json();
 const { validateNewUser } = require('../../../utilities/model');
 const { hashPassword }  = require('../../../utilities/password');
 const { addNewItem, deleteItem } = require('../controllers/controller');
 const { User } = require('../../../database/models/user');
 const isJWTAuth = require('../../../config/isJWTAuth');
 const populateUser = require('../../../utilities/user');
-
-userRouter.use(jsonParser);
+userRouter.use(express.json()); 
 
 // user register
 userRouter.post('/register', validateNewUser, async (req, res, next) => {

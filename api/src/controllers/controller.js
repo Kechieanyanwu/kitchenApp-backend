@@ -14,39 +14,40 @@ const getAllItems = async (modelName, userID, t) => {
 };
 
 
-// to be modified to filter by user
-const getItem = async (modelName, itemID, t) => {
-    const requestedItem = await modelName.findByPk(itemID, 
-        { attributes: { exclude: ['date_created', 'date_updated'] },
-            transaction: t });
-    if (requestedItem === null) {
-        throw nonExistentItemError;
-    } else {
-        return requestedItem.dataValues;
-    }
-};
 
-// const getItem = async (modelName, itemID, userID, t) => { //modify so you return the requested item outside of the try-catch thing
-//     try{
-//         const requestedItem = await modelName.findByPk(itemID, 
-//             {
-//                 where: {
-//                     user_id: userID
-//                 }
-//             }, 
-//             { transaction: t })
-//         if (requestedItem === null) {
-//             throw nonExistentItemError;
-//         } else {
-//             delete requestedItem.dataValues.date_created;
-//             delete requestedItem.dataValues.date_updated;
-//             return requestedItem.dataValues;
-//         }
-
-//     } catch (err) {
-//         throw err;
+// const getItem = async (modelName, itemID, t) => {
+//     const requestedItem = await modelName.findByPk(itemID, 
+//         { attributes: { exclude: ['date_created', 'date_updated'] },
+//             transaction: t });
+//     if (requestedItem === null) {
+//         throw nonExistentItemError;
+//     } else {
+//         return requestedItem.dataValues;
 //     }
-// }
+// };
+
+// // to be modified to filter by user
+const getItem = async (modelName, itemID, userID, t) => { //modify so you return the requested item outside of the try-catch thing
+    try{
+        const requestedItem = await modelName.findByPk(itemID, 
+            {
+                where: {
+                    user_id: userID
+                }
+            }, 
+            { transaction: t })
+        if (requestedItem === null) {
+            throw nonExistentItemError;
+        } else {
+            delete requestedItem.dataValues.date_created;
+            delete requestedItem.dataValues.date_updated;
+            return requestedItem.dataValues;
+        }
+
+    } catch (err) {
+        throw err;
+    }
+}
 
 
 const addNewItem = async(modelName, newItem, t) => { //update to include userID

@@ -9,8 +9,7 @@ const {
     moveCheckedItem } = require('../controllers/controller');
 
 const { validateNewGroceryItem } = require('../../../utilities/model');
-const bodyParser = require('body-parser');
-const jsonParser = bodyParser.json(); //used only in specific routes
+checklistRouter.use(express.json()); 
 const isJWTAuth = require('../../../config/isJWTAuth');
 const populateUser = require('../../../utilities/user');
 
@@ -26,14 +25,14 @@ checklistRouter.get('/', async (req, res, next) => {
     try {
         checklistArray = await getAllItems(Checklist, req.userId);
     } catch (err) {
-        next(err); //validate that all errs have message and status 
+        next(err);
     }
     res.status(200).json(checklistArray);
 });
 
 
 //add new checklist item
-checklistRouter.post('/', jsonParser, validateNewGroceryItem, async (req, res, next) => {
+checklistRouter.post('/', validateNewGroceryItem, async (req, res, next) => {
     let addedItem;
     const newItem = { item_name: req.item_name, quantity: req.quantity, category_id: req.category_id, user_id: req.userId };
     try {
@@ -47,7 +46,7 @@ checklistRouter.post('/', jsonParser, validateNewGroceryItem, async (req, res, n
 
 
 //update existing checklist item
-checklistRouter.put('/:itemID', jsonParser, async (req, res, next) => {
+checklistRouter.put('/:itemID', async (req, res, next) => {
     //can i have a cached list of items in the database? Like an array of existing IDs? so I don't have to keep querying? Potentially....
     const itemID = req.params.itemID; //code smell, could use a general router.params thingy especially to validate existence
     const update = req.body;
@@ -72,7 +71,7 @@ checklistRouter.put('/:itemID', jsonParser, async (req, res, next) => {
     }
 });
 
-checklistRouter.delete('/:itemID', jsonParser, async (req, res, next) => {
+checklistRouter.delete('/:itemID', async (req, res, next) => {
 
     const itemID = req.params.itemID;
     let updatedChecklist;
