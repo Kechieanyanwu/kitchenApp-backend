@@ -34,6 +34,7 @@ userRouter.post('/register', validateNewUser, async (req, res, next) => {
 });
 
 // user delete 
+// to implement permissions. Only admin should have permission for this 
 userRouter.delete('/:itemID', isJWTAuth, async (req, res, next) => {
     const itemID = req.params.itemID;
     let updatedUsers;

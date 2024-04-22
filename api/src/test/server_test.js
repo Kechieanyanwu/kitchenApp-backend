@@ -120,6 +120,7 @@ describe('KitchenApp testing', function () {
                     //assert that response headers sets an authentication cookie 
                     chai.expect(response.headers['set-cookie']).to.be.an('array');
                     chai.expect(response.headers['set-cookie'][0]).to.include('auth_token=');
+                    // set authentication 
 
                     const cookie = response.headers['set-cookie'][0];
                     const matches = cookie.match(/auth_token=(Bearer%20[^\;]+)/);
