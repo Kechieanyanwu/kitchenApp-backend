@@ -126,7 +126,6 @@ describe('KitchenApp testing', function () {
                     const matches = cookie.match(/auth_token=(Bearer%20[^\;]+)/);
                     const authTokenEncoded = matches ? matches[1] : null;
                     auth_token = decodeURIComponent(authTokenEncoded);
-                    console.log(auth_token); //test
             
     
                     assert.equal(response.status, 200);
@@ -167,172 +166,172 @@ describe('KitchenApp testing', function () {
                     }
                 });
             
-                // describe('POST endpoint testing', () => {
-                //     const endpoints = [
-                //         {
-                //             name: 'Categories',
-                //             route: '/categories',
-                //             testCases: [ //test if I can take out user_id
-                //                 {
-                //                     requestType: 'Good',
-                //                     description: 'responds with 201 to a valid request body',
-                //                     requestBody: { 'category_name': 'Post Category Test', 'user_id': 1 },
-                //                     expectedStatus: 201,
-                //                     expectedResponse: {'id': 6, 'category_name': 'Post Category Test', 'user_id': 1,}
-                //                 },
-                //                 {
-                //                     requestType: 'Bad',
-                //                     description: 'rejects an empty request body',
-                //                     requestBody: undefined,
-                //                     expectedStatus: 400,
-                //                     expectedError: 'Empty Body'
-                //                 }, 
-                //                 {
-                //                     requestType: 'Bad',
-                //                     description: 'rejects a request body with an incorrect schema',
-                //                     requestBody: { 'inventory': 'Dairy' },
-                //                     expectedStatus: 400,
-                //                     expectedError: incompleteCategoryError.message
-                //                 }
-                //             ]
-                //         },
-                //         {
-                //             name: 'Checklist',
-                //             route: '/checklist',
-                //             testCases: [
-                //                 {
-                //                     requestType: 'Good',
-                //                     description: 'responds with 201 to a valid request body',  
-                //                     requestBody: {
-                //                         'item_name': 'Post Checklist Test',
-                //                         'quantity': 2,
-                //                         'category_id': 3,
-                //                         'user_id': 1,
-                //                     },
-                //                     expectedStatus: 201,
-                //                     expectedResponse: {
-                //                         'id': 6,
-                //                         'item_name': 'Post Checklist Test',
-                //                         'quantity': 2,
-                //                         'category_id': 3,
-                //                         'purchased': false,
-                //                         'user_id': 1,
-                //                     },
-                //                 },
-                //                 {
-                //                     requestType: 'Bad', //uh-oh, is this code smell? Let's finish and get back to it
-                //                     description: 'rejects an empty request body',  
-                //                     requestBody: undefined,
-                //                     expectedStatus: 400,
-                //                     expectedError: 'Empty Body'
-                //                 }, 
-                //                 {
-                //                     requestType: 'Bad',
-                //                     description: 'rejects a request body with an incorrect schema',
-                //                     requestBody: { 'inventory': 'Dairy' },
-                //                     expectedStatus: 400,
-                //                     expectedError: incompleteItemError.message
-                //                 },
-                //             ]
-                //         },
-                //         {
-                //             name: 'Inventory',
-                //             route: '/inventory',
-                //             testCases: [
-                //                 {
-                //                     requestType: 'Good',
-                //                     description: 'responds with 201 to a valid request body',  
-                //                     requestBody: {
-                //                         'item_name': 'Post Inventory Test',
-                //                         'quantity': 20,
-                //                         'category_id': 3,
-                //                         'user_id': 1,
-                //                     },
-                //                     expectedStatus: 201,
-                //                     expectedResponse: {
-                //                         'id': 6,
-                //                         'item_name': 'Post Inventory Test',
-                //                         'quantity': 20,
-                //                         'category_id': 3,
-                //                         'user_id': 1,
-                //                     },
-                //                 },
-                //                 {
-                //                     requestType: 'Bad',
-                //                     description: 'rejects an empty request body',  
-                //                     requestBody: undefined,
-                //                     expectedStatus: 400,
-                //                     expectedError: 'Empty Body'
-                //                 }, 
-                //                 {
-                //                     requestType: 'Bad',
-                //                     description: 'rejects a request body with an incorrect schema',
-                //                     requestBody: { 'inventory': 'Dairy' },
-                //                     expectedStatus: 400,
-                //                     expectedError: incompleteItemError.message
-                //                 },
-                //             ]
-                //         },
-                //         // working here to update to User
-                //         {
-                //             name: 'User',
-                //             route: '/user/register',
-                //             testCases: [
-                //                 {
-                //                     requestType: 'Good',
-                //                     description: 'responds with 201 to a valid request body',  
-                //                     requestBody: {
-                //                         email: 'serverTest@gmail.com',
-                //                         username: 'Server Test',
-                //                         password: 'johnnytest'
-                //                     },
-                //                     expectedStatus: 201,
-                //                     expectedResponse: {
-                //                         id: 2,
-                //                         email: 'serverTest@gmail.com',
-                //                         username: 'Server Test',
-                //                     },
-                //                 },
-                //                 {
-                //                     requestType: 'Bad', //uh-oh, is this code smell? Let's finish and get back to it
-                //                     description: 'rejects an empty request body',  
-                //                     requestBody: undefined,
-                //                     expectedStatus: 400,
-                //                     expectedError: 'Empty Body'
-                //                 }, 
-                //                 {
-                //                     requestType: 'Bad', //to update
-                //                     description: 'rejects a request body with an incorrect schema',
-                //                     requestBody: { 'email': 'Dairy' },
-                //                     expectedStatus: 400,
-                //                     expectedError: incompleteUserError.message
-                //                 },
-                //             ]
-                //         }
-                //     ];
+                describe('POST endpoint testing', () => {
+                    const endpoints = [
+                        {
+                            name: 'Categories',
+                            route: '/categories',
+                            testCases: [ //test if I can take out user_id
+                                {
+                                    requestType: 'Good',
+                                    description: 'responds with 201 to a valid request body',
+                                    requestBody: { 'category_name': 'Post Category Test', 'user_id': 1 },
+                                    expectedStatus: 201,
+                                    expectedResponse: {'id': 6, 'category_name': 'Post Category Test', 'user_id': 1,}
+                                },
+                                {
+                                    requestType: 'Bad',
+                                    description: 'rejects an empty request body',
+                                    requestBody: undefined,
+                                    expectedStatus: 400,
+                                    expectedError: 'Empty Body'
+                                }, 
+                                {
+                                    requestType: 'Bad',
+                                    description: 'rejects a request body with an incorrect schema',
+                                    requestBody: { 'inventory': 'Dairy' },
+                                    expectedStatus: 400,
+                                    expectedError: incompleteCategoryError.message
+                                }
+                            ]
+                        },
+                        {
+                            name: 'Checklist',
+                            route: '/checklist',
+                            testCases: [
+                                {
+                                    requestType: 'Good',
+                                    description: 'responds with 201 to a valid request body',  
+                                    requestBody: {
+                                        'item_name': 'Post Checklist Test',
+                                        'quantity': 2,
+                                        'category_id': 3,
+                                        'user_id': 1,
+                                    },
+                                    expectedStatus: 201,
+                                    expectedResponse: {
+                                        'id': 6,
+                                        'item_name': 'Post Checklist Test',
+                                        'quantity': 2,
+                                        'category_id': 3,
+                                        'purchased': false,
+                                        'user_id': 1,
+                                    },
+                                },
+                                {
+                                    requestType: 'Bad', //uh-oh, is this code smell? Let's finish and get back to it
+                                    description: 'rejects an empty request body',  
+                                    requestBody: undefined,
+                                    expectedStatus: 400,
+                                    expectedError: 'Empty Body'
+                                }, 
+                                {
+                                    requestType: 'Bad',
+                                    description: 'rejects a request body with an incorrect schema',
+                                    requestBody: { 'inventory': 'Dairy' },
+                                    expectedStatus: 400,
+                                    expectedError: incompleteItemError.message
+                                },
+                            ]
+                        },
+                        {
+                            name: 'Inventory',
+                            route: '/inventory',
+                            testCases: [
+                                {
+                                    requestType: 'Good',
+                                    description: 'responds with 201 to a valid request body',  
+                                    requestBody: {
+                                        'item_name': 'Post Inventory Test',
+                                        'quantity': 20,
+                                        'category_id': 3,
+                                        'user_id': 1,
+                                    },
+                                    expectedStatus: 201,
+                                    expectedResponse: {
+                                        'id': 6,
+                                        'item_name': 'Post Inventory Test',
+                                        'quantity': 20,
+                                        'category_id': 3,
+                                        'user_id': 1,
+                                    },
+                                },
+                                {
+                                    requestType: 'Bad',
+                                    description: 'rejects an empty request body',  
+                                    requestBody: undefined,
+                                    expectedStatus: 400,
+                                    expectedError: 'Empty Body'
+                                }, 
+                                {
+                                    requestType: 'Bad',
+                                    description: 'rejects a request body with an incorrect schema',
+                                    requestBody: { 'inventory': 'Dairy' },
+                                    expectedStatus: 400,
+                                    expectedError: incompleteItemError.message
+                                },
+                            ]
+                        },
+                        // working here to update to User
+                        {
+                            name: 'User',
+                            route: '/user/register',
+                            testCases: [
+                                {
+                                    requestType: 'Good',
+                                    description: 'responds with 201 to a valid request body',  
+                                    requestBody: {
+                                        email: 'serverTest@gmail.com',
+                                        username: 'Server Test',
+                                        password: 'johnnytest'
+                                    },
+                                    expectedStatus: 201,
+                                    expectedResponse: {
+                                        id: 2,
+                                        email: 'serverTest@gmail.com',
+                                        username: 'Server Test',
+                                    },
+                                },
+                                {
+                                    requestType: 'Bad', //uh-oh, is this code smell? Let's finish and get back to it
+                                    description: 'rejects an empty request body',  
+                                    requestBody: undefined,
+                                    expectedStatus: 400,
+                                    expectedError: 'Empty Body'
+                                }, 
+                                {
+                                    requestType: 'Bad', //to update
+                                    description: 'rejects a request body with an incorrect schema',
+                                    requestBody: { 'email': 'Dairy' },
+                                    expectedStatus: 400,
+                                    expectedError: incompleteUserError.message
+                                },
+                            ]
+                        }
+                    ];
                 
-                //     endpoints.forEach((endpoint) => {
-                //         describe(`${endpoint.name}`, () => {
-                //             endpoint.testCases.forEach((testCase) => {
-                //                 const { description, requestBody, expectedStatus, expectedResponse, requestType, expectedError } = testCase;
-                //                 it(description, async() => {
-                //                     const response = await agent.post(endpoint.route).send(requestBody); 
+                    endpoints.forEach((endpoint) => {
+                        describe(`${endpoint.name}`, () => {
+                            endpoint.testCases.forEach((testCase) => {
+                                const { description, requestBody, expectedStatus, expectedResponse, requestType, expectedError } = testCase;
+                                it(description, async() => {
+                                    const response = await agent.post(endpoint.route).set('Authorization', auth_token).send(requestBody); 
     
-                //                     assert.equal(response.status, expectedStatus);
+                                    assert.equal(response.status, expectedStatus);
     
-                //                     if (requestType == 'Good') {
-                //                         assert.deepEqual(response.body, expectedResponse);
-                //                     }
+                                    if (requestType == 'Good') {
+                                        assert.deepEqual(response.body, expectedResponse);
+                                    }
     
-                //                     if (requestType == 'Bad') {
-                //                         assert.deepEqual(response.error.text, expectedError);
-                //                     }
+                                    if (requestType == 'Bad') {
+                                        assert.deepEqual(response.error.text, expectedError);
+                                    }
             
-                //                 });
-                //             });
-                //         });
-                //     });
-                // });
+                                });
+                            });
+                        });
+                    });
+                });
     
                 // describe('Update Item endpoint testing', () => { // to refactor into table-driven test
                 //     describe('Category', ()=> {

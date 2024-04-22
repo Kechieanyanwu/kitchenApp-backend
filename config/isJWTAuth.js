@@ -5,9 +5,7 @@ passport.initialize();
 
 
 const isJWTAuth = (req, res, next) => {
-    console.log('in isJWTauth'); //test
     if (req.headers.authorization) {
-        console.log('you\'ve got an authorisation header'); //test
         passport.authenticate('jwt', { session: false }, function(err, user, info) {
             if (!err && user) {
                 req.user = user;
