@@ -207,7 +207,6 @@ describe('KitchenApp testing', function () {
                                         'item_name': 'Post Checklist Test',
                                         'quantity': 2,
                                         'category_id': 3,
-                                        'user_id': 1,
                                     },
                                     expectedStatus: 201,
                                     expectedResponse: {
@@ -246,7 +245,6 @@ describe('KitchenApp testing', function () {
                                         'item_name': 'Post Inventory Test',
                                         'quantity': 20,
                                         'category_id': 3,
-                                        'user_id': 1,
                                     },
                                     expectedStatus: 201,
                                     expectedResponse: {

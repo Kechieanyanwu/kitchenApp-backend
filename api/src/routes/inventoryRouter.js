@@ -31,7 +31,7 @@ inventoryRouter.get('/', async (req, res, next) => {
 inventoryRouter.post('/', jsonParser, validateNewGroceryItem, async (req, res, next) => {
     let addedItem;
 
-    const newItem = { item_name: req.item_name, quantity: req.quantity, category_id: req.category_id, user_id: req.user_id };
+    const newItem = { item_name: req.item_name, quantity: req.quantity, category_id: req.category_id, user_id: req.userId };
 
     try {
         addedItem = await addNewItem(Inventory, newItem);
