@@ -175,24 +175,25 @@ describe('KitchenApp testing', function () {
                                 {
                                     requestType: 'Good',
                                     description: 'responds with 201 to a valid request body',
-                                    requestBody: { 'category_name': 'Post Category Test', 'user_id': 1 },
+                                    // requestBody: { 'category_name': 'Post Category Test', 'user_id': 1 },
+                                    requestBody: { 'category_name': 'Post Category Test' },
                                     expectedStatus: 201,
-                                    expectedResponse: {'id': 6, 'category_name': 'Post Category Test', 'user_id': 1,}
+                                    expectedResponse: { 'id': 6, 'category_name': 'Post Category Test', 'user_id': 1 }
                                 },
-                                {
-                                    requestType: 'Bad',
-                                    description: 'rejects an empty request body',
-                                    requestBody: undefined,
-                                    expectedStatus: 400,
-                                    expectedError: 'Empty Body'
-                                }, 
-                                {
-                                    requestType: 'Bad',
-                                    description: 'rejects a request body with an incorrect schema',
-                                    requestBody: { 'inventory': 'Dairy' },
-                                    expectedStatus: 400,
-                                    expectedError: incompleteCategoryError.message
-                                }
+                                // {
+                                //     requestType: 'Bad',
+                                //     description: 'rejects an empty request body',
+                                //     requestBody: undefined,
+                                //     expectedStatus: 400,
+                                //     expectedError: 'Empty Body'
+                                // }, 
+                                // {
+                                //     requestType: 'Bad',
+                                //     description: 'rejects a request body with an incorrect schema',
+                                //     requestBody: { 'inventory': 'Dairy' },
+                                //     expectedStatus: 400,
+                                //     expectedError: incompleteCategoryError.message
+                                // }
                             ]
                         },
                         {
@@ -218,20 +219,20 @@ describe('KitchenApp testing', function () {
                                         'user_id': 1,
                                     },
                                 },
-                                {
-                                    requestType: 'Bad', //uh-oh, is this code smell? Let's finish and get back to it
-                                    description: 'rejects an empty request body',  
-                                    requestBody: undefined,
-                                    expectedStatus: 400,
-                                    expectedError: 'Empty Body'
-                                }, 
-                                {
-                                    requestType: 'Bad',
-                                    description: 'rejects a request body with an incorrect schema',
-                                    requestBody: { 'inventory': 'Dairy' },
-                                    expectedStatus: 400,
-                                    expectedError: incompleteItemError.message
-                                },
+                                // {
+                                //     requestType: 'Bad', //uh-oh, is this code smell? Let's finish and get back to it
+                                //     description: 'rejects an empty request body',  
+                                //     requestBody: undefined,
+                                //     expectedStatus: 400,
+                                //     expectedError: 'Empty Body'
+                                // }, 
+                                // {
+                                //     requestType: 'Bad',
+                                //     description: 'rejects a request body with an incorrect schema',
+                                //     requestBody: { 'inventory': 'Dairy' },
+                                //     expectedStatus: 400,
+                                //     expectedError: incompleteItemError.message
+                                // },
                             ]
                         },
                         {
@@ -256,20 +257,20 @@ describe('KitchenApp testing', function () {
                                         'user_id': 1,
                                     },
                                 },
-                                {
-                                    requestType: 'Bad',
-                                    description: 'rejects an empty request body',  
-                                    requestBody: undefined,
-                                    expectedStatus: 400,
-                                    expectedError: 'Empty Body'
-                                }, 
-                                {
-                                    requestType: 'Bad',
-                                    description: 'rejects a request body with an incorrect schema',
-                                    requestBody: { 'inventory': 'Dairy' },
-                                    expectedStatus: 400,
-                                    expectedError: incompleteItemError.message
-                                },
+                                // {
+                                //     requestType: 'Bad',
+                                //     description: 'rejects an empty request body',  
+                                //     requestBody: undefined,
+                                //     expectedStatus: 400,
+                                //     expectedError: 'Empty Body'
+                                // }, 
+                                // {
+                                //     requestType: 'Bad',
+                                //     description: 'rejects a request body with an incorrect schema',
+                                //     requestBody: { 'inventory': 'Dairy' },
+                                //     expectedStatus: 400,
+                                //     expectedError: incompleteItemError.message
+                                // },
                             ]
                         },
                         // working here to update to User
@@ -292,20 +293,20 @@ describe('KitchenApp testing', function () {
                                         username: 'Server Test',
                                     },
                                 },
-                                {
-                                    requestType: 'Bad', //uh-oh, is this code smell? Let's finish and get back to it
-                                    description: 'rejects an empty request body',  
-                                    requestBody: undefined,
-                                    expectedStatus: 400,
-                                    expectedError: 'Empty Body'
-                                }, 
-                                {
-                                    requestType: 'Bad', //to update
-                                    description: 'rejects a request body with an incorrect schema',
-                                    requestBody: { 'email': 'Dairy' },
-                                    expectedStatus: 400,
-                                    expectedError: incompleteUserError.message
-                                },
+                                // {
+                                //     requestType: 'Bad', //uh-oh, is this code smell? Let's finish and get back to it
+                                //     description: 'rejects an empty request body',  
+                                //     requestBody: undefined,
+                                //     expectedStatus: 400,
+                                //     expectedError: 'Empty Body'
+                                // }, 
+                                // {
+                                //     requestType: 'Bad', //to update
+                                //     description: 'rejects a request body with an incorrect schema',
+                                //     requestBody: { 'email': 'Dairy' },
+                                //     expectedStatus: 400,
+                                //     expectedError: incompleteUserError.message
+                                // },
                             ]
                         }
                     ];

@@ -1,16 +1,16 @@
 const {
-        nonExistentItemError,
-        incompleteItemError,
-        incompleteCategoryError,
-        incompleteUserError,
-        emptyBodyError
-            } = require("./errors");
+    nonExistentItemError,
+    incompleteItemError,
+    incompleteCategoryError,
+    incompleteUserError,
+    emptyBodyError
+} = require('./errors');
 
-const emailValidator = require("email-validator");
+const emailValidator = require('email-validator');
 
 
 const validateNewGroceryItem = (req, res, next) => {
-    if (JSON.stringify(req.body) == "{}") {
+    if (JSON.stringify(req.body) == '{}') {
         const err = emptyBodyError;
         err.status = 400;
         next(err);
@@ -21,10 +21,10 @@ const validateNewGroceryItem = (req, res, next) => {
         req.quantity = req.body.quantity;
         req.category_id = req.body.category_id;
         req.user_id = req.body.user_id;
-        if (typeof req.item_name === "string" && typeof req.quantity === "number" && typeof req.category_id === "number" && typeof req.body.user_id === "number") {
+        if (typeof req.item_name === 'string' && typeof req.quantity === 'number' && typeof req.category_id === 'number' && typeof req.body.user_id === 'number') {
             next();
         } else {
-            const err = new Error("Item name must be a string, userID, quantity and category ID must be a number");
+            const err = new Error('Item name must be a string, userID, quantity and category ID must be a number');
             err.status = 400; 
 
             next(err);
@@ -37,33 +37,49 @@ const validateNewGroceryItem = (req, res, next) => {
 };
 
 
+// const validateNewCategory = (req, res, next) => {
+//     if (JSON.stringify(req.body) == "{}") {
+//         const err = emptyBodyError;
+//         err.status = 400;
+//         next(err);
+//     }
+    
+//     requestObjectKeys = Object.keys(req.body);
+
+
+//     if (req.body.category_name && req.body.user_id && (requestObjectKeys.length == 2)) {
+//         if (typeof req.body.category_name === "string" && typeof req.body.user_id === "number") {
+//             req.category_name = req.body.category_name;
+//             req.user_id = req.body.user_id;
+//             next();
+//         } else {
+//             const err = new Error("Category name must be a string and userID must be a number"); 
+//             err.status = 400;
+//             next(err);
+//         }
+//     } else {
+//         const err = incompleteCategoryError;
+//         err.status = 400;
+//         next(err);
+//     }
+// };
+
 const validateNewCategory = (req, res, next) => {
-    if (JSON.stringify(req.body) == "{}") {
+    if (JSON.stringify(req.body) == '{}') {
         const err = emptyBodyError;
         err.status = 400;
         next(err);
     }
-    
-    requestObjectKeys = Object.keys(req.body);
 
-
-    if (req.body.category_name && req.body.user_id && (requestObjectKeys.length == 2)) {
-        if (typeof req.body.category_name === "string" && typeof req.body.user_id === "number") {
-            req.category_name = req.body.category_name;
-            req.user_id = req.body.user_id;
-            next();
-        } else {
-            const err = new Error("Category name must be a string and userID must be a number"); 
-            err.status = 400;
-            next(err);
-        }
+    if (req.body.category_name && typeof req.body.category_name === 'string' ) {
+        req.category_name = req.body.category_name;
+        next();
     } else {
-        const err = incompleteCategoryError;
+        const err = new Error('Category name must be a string'); 
         err.status = 400;
         next(err);
     }
 };
-
 
 const validateID = async (itemID, modelName, t) => {
     const item = await modelName.findByPk(itemID, 
@@ -76,7 +92,7 @@ const validateID = async (itemID, modelName, t) => {
 }
 
 const validateNewUser = (req, res, next) => {
-    if (JSON.stringify(req.body) == "{}") {
+    if (JSON.stringify(req.body) == '{}') {
         const err = emptyBodyError;
         err.status = 400;
         next(err);
@@ -91,7 +107,7 @@ const validateNewUser = (req, res, next) => {
     if (emailValidator.validate(req.body.email)) {
         req.email = req.body.email
     } else {
-        const err = new Error("Invalid Email");
+        const err = new Error('Invalid Email');
         err.status = 400;
         next(err);
     };

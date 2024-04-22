@@ -75,6 +75,7 @@ const getItem = async (modelName, itemID, t) => {
 
 
 const addNewItem = async(modelName, newItem, t) => { //update to include userID
+    console.log('in add new item'); //test
     try {
         const addedItem = await modelName.create(newItem,
             { transaction: t });
@@ -89,12 +90,13 @@ const addNewItem = async(modelName, newItem, t) => { //update to include userID
         }
 
         // return new item
-        return addedItem.dataValues
+        return addedItem.dataValues;
 
     } catch (err) {
+        console.log(err); //test
         throw err;
     }
-}
+};
 
 const updateItem = async(modelName, itemID, desiredUpdate, t) => { 
     let item;

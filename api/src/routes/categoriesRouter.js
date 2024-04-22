@@ -22,7 +22,6 @@ categoriesRouter.use(populateUser);
 //to update to get where ID is req.userID
 categoriesRouter.get('/', async (req, res, next) => {
     let categoriesArray;
-    console.log('User Id as populated by the middleware is', req.userId); //test
     try {
         categoriesArray = await getAllItems(Category); 
     } catch (err) {
@@ -35,22 +34,9 @@ categoriesRouter.get('/', async (req, res, next) => {
 
 //add new category
 
-// categoriesRouter.post("/", jsonParser, validateNewCategory, async (req, res, next) => {
-//     let addedCategory;
-//     const newCategory = { category_name: req.category_name, user_id: req.userID }; //included req.userID - will need to work on this 
-
-//     try {
-//         addedCategory = await addNewItem(Category, newCategory);
-//     } catch (err) {
-//         err.status = 400;
-//         next(err);
-//     }
-//     res.status(201).send(addedCategory); 
-// })
-
 categoriesRouter.post('/', jsonParser, validateNewCategory, async (req, res, next) => {
     let addedCategory;
-    const newCategory = { category_name: req.category_name, user_id: req.user_id };
+    const newCategory = { category_name: req.category_name, user_id: req.userId }; //update category to send just userID
 
     try {
         addedCategory = await addNewItem(Category, newCategory);
@@ -60,6 +46,19 @@ categoriesRouter.post('/', jsonParser, validateNewCategory, async (req, res, nex
     }
     res.status(201).send(addedCategory); 
 });
+
+// categoriesRouter.post('/', jsonParser, validateNewCategory, async (req, res, next) => {
+//     let addedCategory;
+//     const newCategory = { category_name: req.category_name, user_id: req.user_id };
+
+//     try {
+//         addedCategory = await addNewItem(Category, newCategory);
+//     } catch (err) {
+//         err.status = 400;
+//         next(err);
+//     }
+//     res.status(201).send(addedCategory); 
+// });
 
 
 //update existing category
