@@ -19,7 +19,7 @@ inventoryRouter.use(populateUser);
 inventoryRouter.get('/', async (req, res, next) => {
     let inventoryArray;
     try {
-        inventoryArray = await getAllItems(Inventory);
+        inventoryArray = await getAllItems(Inventory, req.userId);
     } catch (err) {
         next(err); //validate that all errs have message and status 
     }

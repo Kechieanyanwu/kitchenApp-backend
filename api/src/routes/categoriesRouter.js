@@ -13,7 +13,7 @@ const { Category } = require('../../../database/models/category');
 const isJWTAuth = require('../../../config/isJWTAuth');
 const populateUser = require('../../../utilities/user');
 
-const jsonParser = bodyParser.json(); //used only in specific routes
+const jsonParser = bodyParser.json  (); //used only in specific routes
 
 categoriesRouter.use(isJWTAuth);
 categoriesRouter.use(populateUser);
@@ -23,7 +23,7 @@ categoriesRouter.use(populateUser);
 categoriesRouter.get('/', async (req, res, next) => {
     let categoriesArray;
     try {
-        categoriesArray = await getAllItems(Category); 
+        categoriesArray = await getAllItems(Category, req.userId); 
     } catch (err) {
         next(err); //validate that all errs have message and status 
     }

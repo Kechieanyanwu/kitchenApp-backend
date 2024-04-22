@@ -24,7 +24,7 @@ checklistRouter.use(populateUser);
 checklistRouter.get('/', async (req, res, next) => {
     let checklistArray;
     try {
-        checklistArray = await getAllItems(Checklist); //based on ID
+        checklistArray = await getAllItems(Checklist, req.userId);
     } catch (err) {
         next(err); //validate that all errs have message and status 
     }
