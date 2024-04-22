@@ -87,7 +87,47 @@ describe('KitchenApp testing', function () {
                 }
             });
 
-            //to include other calls to endpoints
+            describe('Add new User', () => {
+                it('responds with 201 to a valid request body', async () => {
+                    const newUser = {
+                        email: 'serverTest@gmail.com',
+                        username: 'Server Test',
+                        password: 'johnnytest'
+                    };
+                    const expectedStatus = 201;
+                    const expectedResponse = {
+                        id: 2,
+                        email: 'serverTest@gmail.com',
+                        username: 'Server Test',
+                    };
+                    
+                    const response = await agent.post('/user/register').send(newUser);
+
+                    assert.equal(response.status, expectedStatus);
+                    assert.deepEqual(response.body, expectedResponse);
+                });
+
+                it('rejects an empty request body', async () => {
+                    const newUser = {};
+                    const expectedStatus = 400;
+                    const expectedError = 'Empty Body';
+                    
+                    const response = await agent.post('/user/register').send(newUser);
+                    
+                    assert.equal(response.status, expectedStatus);
+                    assert.include(response.error.text, expectedError, 'object contains error');
+                });
+                
+                it('rejects a request body with an incorrect schema', async () => {
+                    const newUser = { 'email': 'Dairy' };
+                    const expectedStatus = 400;
+                    
+                    const response = await agent.post('/user/register').send(newUser);
+                 
+                    assert.equal(response.status, expectedStatus);
+                });
+            });
+
             after( async () => {
                 agent.close();
             });
@@ -175,18 +215,17 @@ describe('KitchenApp testing', function () {
                                 {
                                     requestType: 'Good',
                                     description: 'responds with 201 to a valid request body',
-                                    // requestBody: { 'category_name': 'Post Category Test', 'user_id': 1 },
                                     requestBody: { 'category_name': 'Post Category Test' },
                                     expectedStatus: 201,
                                     expectedResponse: { 'id': 6, 'category_name': 'Post Category Test', 'user_id': 1 }
                                 },
-                                // {
-                                //     requestType: 'Bad',
-                                //     description: 'rejects an empty request body',
-                                //     requestBody: undefined,
-                                //     expectedStatus: 400,
-                                //     expectedError: 'Empty Body'
-                                // }, 
+                                {
+                                    requestType: 'Bad',
+                                    description: 'rejects an empty request body',
+                                    requestBody: undefined,
+                                    expectedStatus: 400,
+                                    expectedError: 'Empty Body'
+                                }, 
                                 // {
                                 //     requestType: 'Bad',
                                 //     description: 'rejects a request body with an incorrect schema',
@@ -218,13 +257,13 @@ describe('KitchenApp testing', function () {
                                         'user_id': 1,
                                     },
                                 },
-                                // {
-                                //     requestType: 'Bad', //uh-oh, is this code smell? Let's finish and get back to it
-                                //     description: 'rejects an empty request body',  
-                                //     requestBody: undefined,
-                                //     expectedStatus: 400,
-                                //     expectedError: 'Empty Body'
-                                // }, 
+                                {
+                                    requestType: 'Bad', 
+                                    description: 'rejects an empty request body',  
+                                    requestBody: undefined,
+                                    expectedStatus: 400,
+                                    expectedError: 'Empty Body'
+                                }, 
                                 // {
                                 //     requestType: 'Bad',
                                 //     description: 'rejects a request body with an incorrect schema',
@@ -255,13 +294,13 @@ describe('KitchenApp testing', function () {
                                         'user_id': 1,
                                     },
                                 },
-                                // {
-                                //     requestType: 'Bad',
-                                //     description: 'rejects an empty request body',  
-                                //     requestBody: undefined,
-                                //     expectedStatus: 400,
-                                //     expectedError: 'Empty Body'
-                                // }, 
+                                {
+                                    requestType: 'Bad',
+                                    description: 'rejects an empty request body',  
+                                    requestBody: undefined,
+                                    expectedStatus: 400,
+                                    expectedError: 'Empty Body'
+                                }, 
                                 // {
                                 //     requestType: 'Bad',
                                 //     description: 'rejects a request body with an incorrect schema',
@@ -272,41 +311,41 @@ describe('KitchenApp testing', function () {
                             ]
                         },
                         // working here to update to User
-                        {
-                            name: 'User',
-                            route: '/user/register',
-                            testCases: [
-                                {
-                                    requestType: 'Good',
-                                    description: 'responds with 201 to a valid request body',  
-                                    requestBody: {
-                                        email: 'serverTest@gmail.com',
-                                        username: 'Server Test',
-                                        password: 'johnnytest'
-                                    },
-                                    expectedStatus: 201,
-                                    expectedResponse: {
-                                        id: 2,
-                                        email: 'serverTest@gmail.com',
-                                        username: 'Server Test',
-                                    },
-                                },
-                                // {
-                                //     requestType: 'Bad', //uh-oh, is this code smell? Let's finish and get back to it
-                                //     description: 'rejects an empty request body',  
-                                //     requestBody: undefined,
-                                //     expectedStatus: 400,
-                                //     expectedError: 'Empty Body'
-                                // }, 
-                                // {
-                                //     requestType: 'Bad', //to update
-                                //     description: 'rejects a request body with an incorrect schema',
-                                //     requestBody: { 'email': 'Dairy' },
-                                //     expectedStatus: 400,
-                                //     expectedError: incompleteUserError.message
-                                // },
-                            ]
-                        }
+                        // {
+                        //     name: 'User',
+                        //     route: '/user/register',
+                        //     testCases: [
+                        //         {
+                        //             requestType: 'Good',
+                        //             description: 'responds with 201 to a valid request body',  
+                        //             requestBody: {
+                        //                 email: 'serverTest@gmail.com',
+                        //                 username: 'Server Test',
+                        //                 password: 'johnnytest'
+                        //             },
+                        //             expectedStatus: 201,
+                        //             expectedResponse: {
+                        //                 id: 2,
+                        //                 email: 'serverTest@gmail.com',
+                        //                 username: 'Server Test',
+                        //             },
+                        //         },
+                        //         {
+                        //             requestType: 'Bad', 
+                        //             description: 'rejects an empty request body',  
+                        //             requestBody: undefined,
+                        //             expectedStatus: 400,
+                        //             expectedError: 'Empty Body'
+                        //         }, 
+                        //         // {
+                        //         //     requestType: 'Bad', //to update
+                        //         //     description: 'rejects a request body with an incorrect schema',
+                        //         //     requestBody: { 'email': 'Dairy' },
+                        //         //     expectedStatus: 400,
+                        //         //     expectedError: incompleteUserError.message
+                        //         // },
+                        //     ]
+                        // }
                     ];
                 
                     endpoints.forEach((endpoint) => {
@@ -315,17 +354,13 @@ describe('KitchenApp testing', function () {
                                 const { description, requestBody, expectedStatus, expectedResponse, requestType, expectedError } = testCase;
                                 it(description, async() => {
                                     const response = await agent.post(endpoint.route).set('Authorization', auth_token).send(requestBody); 
-    
                                     assert.equal(response.status, expectedStatus);
     
                                     if (requestType == 'Good') {
                                         assert.deepEqual(response.body, expectedResponse);
+                                    } else {
+                                        assert.include(response.error.text, expectedError, 'object contains error');
                                     }
-    
-                                    if (requestType == 'Bad') {
-                                        assert.deepEqual(response.error.text, expectedError);
-                                    }
-            
                                 });
                             });
                         });

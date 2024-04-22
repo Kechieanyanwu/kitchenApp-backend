@@ -31,7 +31,6 @@ categoriesRouter.get('/', async (req, res, next) => {
 
 
 //add new category
-
 categoriesRouter.post('/', validateNewCategory, async (req, res, next) => {
     let addedCategory;
     const newCategory = { category_name: req.category_name, user_id: req.userId }; 
@@ -44,19 +43,6 @@ categoriesRouter.post('/', validateNewCategory, async (req, res, next) => {
     }
     res.status(201).send(addedCategory); 
 });
-
-// categoriesRouter.post('/', jsonParser, validateNewCategory, async (req, res, next) => {
-//     let addedCategory;
-//     const newCategory = { category_name: req.category_name, user_id: req.user_id };
-
-//     try {
-//         addedCategory = await addNewItem(Category, newCategory);
-//     } catch (err) {
-//         err.status = 400;
-//         next(err);
-//     }
-//     res.status(201).send(addedCategory); 
-// });
 
 
 //update existing category

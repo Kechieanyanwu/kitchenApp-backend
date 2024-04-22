@@ -65,7 +65,7 @@ const addNewItem = async(modelName, newItem, t) => { //update to include userID
             delete addedItem.dataValues.salt;
         }
 
-        // return new item
+        console.log('Added items', addedItem.dataValues); //test
         return addedItem.dataValues;
 
     } catch (err) {

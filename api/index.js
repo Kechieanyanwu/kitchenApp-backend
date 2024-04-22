@@ -84,6 +84,7 @@ app.get('/login', async (req, res) => {
     );
 });
 
+
 app.get('/protected-route', isAuth, (req, res) => {
     res.send(`
             <h1>You made it to the route.</h1><br>
