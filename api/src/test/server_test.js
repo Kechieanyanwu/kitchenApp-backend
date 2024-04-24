@@ -211,7 +211,7 @@ describe('KitchenApp testing', function () {
                         {
                             name: 'Categories',
                             route: '/categories',
-                            testCases: [ //test if I can take out user_id
+                            testCases: [
                                 {
                                     requestType: 'Good',
                                     description: 'responds with 201 to a valid request body',
