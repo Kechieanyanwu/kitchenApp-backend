@@ -16,10 +16,10 @@ module.exports = {
             user_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
-                onDelete: "CASCADE",
+                onDelete: 'CASCADE',
                 references: {
-                    model: "Users",
-                    key: "id"
+                    model: 'Users',
+                    key: 'id'
                 }
             },
             date_created: {

@@ -7,13 +7,14 @@
     "test": "api/src/test"
   },
   "scripts": {
+    "reset-dev-db": "cross-env NODE_ENV=development npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all --seeders-path ./database/seeders/development",
     "test": "cross-env NODE_ENV=test mocha 'api/src/test/*.js'",
     "pretest": "cross-env NODE_ENV=test npm run db:reset",
     "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all --seeders-path ./database/seeders/test",
     "db:create:test": "cross-env NODE_ENV=test npx sequelize-cli db:create",
-    "start": "node api/index.js",
-    "startdev": "nodemon api/index.js",
-    "migrate": "npx sequelize-cli db:migrate",
+    "start": "cross-env NODE_ENV=development node api/index.js",
+    "startdev": "cross-env NODE_ENV=development nodemon api/index.js",
+    "migrate": "cross-env NODE_ENV=development npx sequelize-cli db:migrate",
     "build": "webpack",
     "prod": "node dist/final.js"
   },
