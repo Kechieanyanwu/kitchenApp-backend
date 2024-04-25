@@ -10,6 +10,7 @@
 
 const process = require('process');
 const { Sequelize } = require('sequelize');
+// eslint-disable-next-line no-undef
 const config = require(__dirname + '/../config/config.js');
 // const env = process.env.NODE_ENV || 'development';
 const env = process.env.NODE_ENV || 'production';
@@ -17,14 +18,30 @@ const db = {};
 
 let sequelize;
 
-if (process.env.VERCEL_ENV) {
-    // Vercel deployment
-    const vercelConfig = config.production.vercel;
-    sequelize = new Sequelize(process.env[vercelConfig.use_env_variable], vercelConfig);
-} else {
-    // Local development or other environments
-    sequelize = new Sequelize(config[env].database, config[env].username, config[env].password, config[env]);
-}
+const connectionTest = async (sequelize) => {
+    try {
+        await sequelize.authenticate();
+        console.log('Connection has been established successfully.');
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
+};
+
+// if (process.env.VERCEL_ENV) {
+//     const vercelConfig = config.production.vercel;
+//     sequelize = new Sequelize(process.env[vercelConfig.use_env_variable], vercelConfig);
+//     // connectionTest(sequelize);
+// } else {
+//     sequelize = new Sequelize(config[env].database, config[env].username, config[env].password, config[env]);
+//     // connectionTest(sequelize);
+// }
+
+
+sequelize = new Sequelize(config[env].database, config[env].username, config[env].password, config[env]);
+
+
+connectionTest(sequelize);
+
 
 
 // if (process.env.VERCEL_ENV) {

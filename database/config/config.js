@@ -21,29 +21,36 @@ module.exports = {
         dialect: 'postgres',
         dialectModule: pg,
     },
+    production: {
+        // use_env_variable: 'VERCEL_POSTGRES_URL',
+        username: process.env.VERCEL_POSTGRES_USER,
+        password: process.env.VERCEL_POSTGRES_PASSWORD,
+        database: process.env.VERCEL_POSTGRES_DATABASE,
+        host: process.env.VERCEL_POSTGRES_HOST,
+        dialect: 'postgres',
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false,
+            },
+        },
+        dialectModule: pg,
+    },
     // production: {
-    //     username: process.env.POSTGRES_USER,
-    //     password: process.env.POSTGRES_PASSWORD,
-    //     database: process.env.POSTGRES_DB_NAME,
-    //     host: process.env.POSTGRES_HOST,
+    //     vercel: {
+    //         use_env_variable: 'VERCEL_POSTGRES_URL',
+    //         dialectOptions: {
+    //             ssl: {
+    //                 require: true,
+    //                 rejectUnauthorized: false,
+    //             },
+    //         },
+    //     },
+    //     username: process.env.VERCEL_POSTGRES_USER,
+    //     password: process.env.VERCEL_POSTGRES_PASSWORD,
+    //     database: process.env.VERCEL_POSTGRES_DB_NAME,
+    //     host: process.env.VERCEL_POSTGRES_HOST,
     //     dialect: 'postgres',
     //     dialectModule: pg,
     // },
-    production: {
-        vercel: {
-            use_env_variable: 'VERCEL_POSTGRES_URL',
-            dialectOptions: {
-                ssl: {
-                    require: true,
-                    rejectUnauthorized: false,
-                },
-            },
-        },
-        username: process.env.VERCEL_POSTGRES_USER,
-        password: process.env.VERCEL_POSTGRES_PASSWORD,
-        database: process.env.VERCEL_POSTGRES_DB_NAME,
-        host: process.env.VERCEL_POSTGRES_HOST,
-        dialect: 'postgres',
-        dialectModule: pg,
-    },
 };
