@@ -8,7 +8,7 @@ const cors = require('cors');
 
 // CORS configuration
 const corsOptions = {
-    origin: process.env.FRONTEND_lOCAL_URL || process.env.FRONTEND_VERCEL_URL, 
+    origin: [process.env.FRONTEND_LOCAL_URL, process.env.FRONTEND_VERCEL_URL], 
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // This allows cookies to be sent with requests
