@@ -14,6 +14,12 @@ const getAllItems = async (modelName, userID, t) => {
 };
 
 
+const countAllItems = async (modelName, userID, t) => {
+    const count = await modelName.count({
+        where: { user_id: userID }
+    });
+    return count;
+};
 
 // const getItem = async (modelName, itemID, t) => {
 //     const requestedItem = await modelName.findByPk(itemID, 
@@ -150,4 +156,5 @@ module.exports = {
     updateItem,
     deleteItem,
     moveCheckedItem,
+    countAllItems,
 };
