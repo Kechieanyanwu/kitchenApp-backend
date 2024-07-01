@@ -12,7 +12,8 @@ const { getAllItems,
     getItem,
     nonExistentItemError,
     updateItem,
-    deleteItem } = require('../controllers/controller');
+    deleteItem, 
+    countAllItems} = require('../controllers/controller');
 
 // Sequelize Imports
 const { Category } = require('../../../database/models/category');
@@ -62,6 +63,19 @@ describe('Controller Function tests', function () {
                 const modelName = Category;
 
                 await assert.isRejected(getItem(modelName, requestedID, t), nonExistentItemError); 
+            });
+        });
+
+        describe('countAllItems', async () => {
+            it('counts all the items in a user\'s inventory', async () => {
+                const userID = 1;
+                const modelName = Category;
+                const expectedCount = 6; //currently 6 but should be 5 when all tests show
+                
+                const count = await countAllItems(modelName,userID, t);
+
+                assert.equal(count, expectedCount, `Expected ${expectedCount} but got ${count}`);
+
             });
         });
 
