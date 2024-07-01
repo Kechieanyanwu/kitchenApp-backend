@@ -21,39 +21,22 @@ const countAllItems = async (modelName, userID, t) => {
     return count;
 };
 
-// const getItem = async (modelName, itemID, t) => {
-//     const requestedItem = await modelName.findByPk(itemID, 
-//         { attributes: { exclude: ['date_created', 'date_updated'] },
-//             transaction: t });
-//     if (requestedItem === null) {
-//         throw nonExistentItemError;
-//     } else {
-//         return requestedItem.dataValues;
-//     }
-// };
-
-// // to be modified to filter by user
 const getItem = async (modelName, itemID, userID, t) => { //modify so you return the requested item outside of the try-catch thing
-    try{
-        const requestedItem = await modelName.findByPk(itemID, 
-            {
-                where: {
-                    user_id: userID
-                }
-            }, 
-            { transaction: t })
-        if (requestedItem === null) {
-            throw nonExistentItemError;
-        } else {
-            delete requestedItem.dataValues.date_created;
-            delete requestedItem.dataValues.date_updated;
-            return requestedItem.dataValues;
-        }
-
-    } catch (err) {
-        throw err;
+    const requestedItem = await modelName.findByPk(itemID, 
+        {
+            where: {
+                user_id: userID
+            }
+        }, 
+        { transaction: t });
+    if (requestedItem === null) {
+        throw nonExistentItemError;
+    } else {
+        delete requestedItem.dataValues.date_created;
+        delete requestedItem.dataValues.date_updated;
+        return requestedItem.dataValues;
     }
-}
+};
 
 
 const addNewItem = async(modelName, newItem, t) => { //update to include userID
@@ -81,13 +64,7 @@ const addNewItem = async(modelName, newItem, t) => { //update to include userID
 };
 
 const updateItem = async(modelName, itemID, desiredUpdate, t) => { 
-    let item;
-    try {
-        item = await validateID(itemID, modelName, t)
-    } catch (err) {
-        throw err;
-    }
-
+    const item = await validateID(itemID, modelName, t);
     await item.update(desiredUpdate, { transaction: t });
 
     // remove these columns from result
@@ -100,12 +77,7 @@ const updateItem = async(modelName, itemID, desiredUpdate, t) => {
 }
 
 const deleteItem = async (modelName, itemID, t) => {
-    let item;
-    try {
-        item = await validateID(itemID, modelName, t)
-    } catch (err) {
-        throw err;
-    }
+    const item = await validateID(itemID, modelName, t);
 
     await item.destroy({ transaction: t });
 
@@ -118,19 +90,14 @@ const deleteItem = async (modelName, itemID, t) => {
             });
         return items; 
     } else {
-        return
+        return;
     }
-}
+};
 
 const moveCheckedItem = async (itemID, t) => {
-    let item;
-    try {
-        item = await validateID(itemID, Checklist, t)
-    } catch (err) {
-        throw err;
-    }
+    let item = await validateID(itemID, Checklist, t);
 
-    newItem = item.get({ transaction: t });
+    const newItem = item.get({ transaction: t });
 
     //remove unnecessary values
     delete newItem.id;
