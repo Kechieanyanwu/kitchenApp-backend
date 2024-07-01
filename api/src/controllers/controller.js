@@ -21,7 +21,7 @@ const countAllItems = async (modelName, userID, t) => {
     return count;
 };
 
-const getItem = async (modelName, itemID, userID, t) => { //modify so you return the requested item outside of the try-catch thing
+const getItem = async (modelName, itemID, userID, t) => {
     const requestedItem = await modelName.findByPk(itemID, 
         {
             where: {
@@ -38,8 +38,8 @@ const getItem = async (modelName, itemID, userID, t) => { //modify so you return
     }
 };
 
-
-const addNewItem = async(modelName, newItem, t) => { //update to include userID
+ // To update to include userID
+const addNewItem = async(modelName, newItem, t) => {
     console.log('in add new item'); //test
     try {
         const addedItem = await modelName.create(newItem,
