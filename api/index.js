@@ -7,15 +7,16 @@ const PORT = process.env.PORT;
 const cors = require('cors');
 
 // CORS configuration
-const whitelist = ['http://localhost:3000', 'https://kitchenapp-deployedfrontend.vercel.app'];
+// const whitelist = ['http://localhost:3000', 'https://kitchenapp-deployedfrontend.vercel.app'];
 const corsOptions = {
-    origin: function (origin, callback) {
-        if (whitelist.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    }, 
+    origin: ['http://localhost:3000', 'https://kitchenapp-deployedfrontend.vercel.app'],
+    // origin: function (origin, callback) {
+    //     if (whitelist.indexOf(origin) !== -1) {
+    //         callback(null, true);
+    //     } else {
+    //         callback(new Error('Not allowed by CORS'));
+    //     }
+    // }, 
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // This allows cookies to be sent with requests
