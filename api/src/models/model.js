@@ -62,7 +62,7 @@ const userSchema = { //kinda like a DTO
 const countSchema = {
     type: 'object',
     properties: {
-        count: { type: 'number ' },
+        count: { type: 'number' },
     },
     required: ['count'],
 };

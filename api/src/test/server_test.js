@@ -10,7 +10,8 @@ const server  = require('../../index');
 // Model Imports 
 const { categoriesSchema,
     checklistSchema,
-    inventorySchema } = require('../models/model');
+    inventorySchema, 
+    countSchema} = require('../models/model');
 
 // Controller Imports
 const { getAllItems } = require('../controllers/controller');
@@ -189,6 +190,11 @@ describe('KitchenApp testing', function () {
                             name: 'Inventory',
                             path: '/inventory',
                             schema: inventorySchema,
+                        },
+                        { //just added
+                            name: 'Checklist Count',
+                            path: '/checklist/count',
+                            schema: countSchema,
                         },
                     ];
             
