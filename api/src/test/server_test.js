@@ -196,6 +196,11 @@ describe('KitchenApp testing', function () {
                             path: '/checklist/count',
                             schema: countSchema,
                         },
+                        { //just added
+                            name: 'Inventory Count',
+                            path: '/inventory/count',
+                            schema: countSchema,
+                        },
                     ];
             
                     for (const endpoint of endpoints) {
