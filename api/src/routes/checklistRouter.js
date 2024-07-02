@@ -6,7 +6,8 @@ const {
     addNewItem,
     updateItem,
     deleteItem,
-    moveCheckedItem } = require('../controllers/controller');
+    moveCheckedItem,
+    countAllItems } = require('../controllers/controller');
 
 const { validateNewGroceryItem } = require('../../../utilities/model');
 checklistRouter.use(express.json()); 
@@ -28,6 +29,18 @@ checklistRouter.get('/', async (req, res, next) => {
         next(err);
     }
     res.status(200).json(checklistArray);
+});
+
+//count all checklist items
+checklistRouter.get('/count', async (req, res, next) => {
+    let count;
+    try {
+        count = await countAllItems(Checklist, req.userId);
+    } catch (err) {
+        next(err);
+    }
+    console.log(count);
+    res.status(200).json({ count });
 });
 
 

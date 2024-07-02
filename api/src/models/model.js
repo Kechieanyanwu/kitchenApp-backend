@@ -1,67 +1,78 @@
 
 const categoriesSchema = {
-    type: "array",
+    type: 'array',
     items: {
-        type: "object",
+        type: 'object',
         properties: {
-            id: {type: "number"},
-            category_name: {type: "string"},
-            user_id: {type: "number"},
+            id: {type: 'number'},
+            category_name: {type: 'string'},
+            user_id: {type: 'number'},
     },
-    required: ["id", "category_name", "user_id"],
+    required: ['id', 'category_name', 'user_id'],
   },
 };
 
 
 const checklistSchema = {
-    type: "array",
+    type: 'array',
     items: {
-        type: "object",
+        type: 'object',
         properties: {
-            id: {type: "number"},
-            item_name: {type: "string"},
-            quantity: {type: "number"},
-            category_id: {type: "number"},
-            user_id: {type: "number"},
-            purchased: {type: "boolean"},
+            id: {type: 'number'},
+            item_name: {type: 'string'},
+            quantity: {type: 'number'},
+            category_id: {type: 'number'},
+            user_id: {type: 'number'},
+            purchased: {type: 'boolean'},
         },
-        required: ["id", "item_name", "quantity", "category_id", "purchased", "user_id"],
+        required: ['id', 'item_name', 'quantity', 'category_id', 'purchased', 'user_id'],
     }
 }
 
 const inventorySchema = {
-    type: "array",
+    type: 'array',
     items: {
-        type: "object",
+        type: 'object',
         properties: {
-            id: { type: "number" },
-            item_name: { type: "string" },
-            quantity: { type: "integer" },
-            category_id: { type: "integer" },
-            user_id: {type: "number"},
+            id: { type: 'number' },
+            item_name: { type: 'string' },
+            quantity: { type: 'integer' },
+            category_id: { type: 'integer' },
+            user_id: {type: 'number'},
         },
-        required: ["id", "item_name", "quantity", "category_id", "user_id"],
+        required: ['id', 'item_name', 'quantity', 'category_id', 'user_id'],
     },
 };
 
 const userSchema = { //kinda like a DTO
-    type: "array",
+    type: 'array',
     items: {
-        type: "object",
+        type: 'object',
         properties: {
-            id: { type: "number" },
-            username: { type: "string" },
-            email: { type: "string" },
-            hashed_password: { type: "string" },
-            salt: { type: "string" },
+            id: { type: 'number' },
+            username: { type: 'string' },
+            email: { type: 'string' },
+            hashed_password: { type: 'string' },
+            salt: { type: 'string' },
         },
-        required: ["id", "username", "email", "hashed_password", "salt"],
+        required: ['id', 'username', 'email', 'hashed_password', 'salt'],
     },
 };
+
+const countSchema = {
+    type: 'object',
+    properties: {
+        count: { type: 'number' },
+    },
+    required: ['count'],
+};
+
+
 
 module.exports = {
     categoriesSchema,
     checklistSchema,
     inventorySchema,
     userSchema,
+    countSchema,
 };

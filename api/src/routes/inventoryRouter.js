@@ -4,7 +4,8 @@ const {
     getAllItems,
     addNewItem,
     updateItem,
-    deleteItem } = require('../controllers/controller');
+    deleteItem, 
+    countAllItems } = require('../controllers/controller');
 const { validateNewGroceryItem } = require('../../../utilities/model');
 const { Inventory } = require('../../../database/models/inventory');
 inventoryRouter.use(express.json()); 
@@ -23,6 +24,18 @@ inventoryRouter.get('/', async (req, res, next) => {
         next(err); //validate that all errs have message and status 
     }
     res.status(200).json(inventoryArray);
+});
+
+//count all inventory items
+inventoryRouter.get('/count', async (req, res, next) => {
+    let count;
+    try {
+        count = await countAllItems(Inventory, req.userId);
+    } catch (err) {
+        next(err);
+    }
+    console.log(count);
+    res.status(200).json({ count });
 });
 
 
