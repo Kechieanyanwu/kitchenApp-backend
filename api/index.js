@@ -7,13 +7,10 @@ const PORT = process.env.PORT;
 const cors = require('cors');
 
 // CORS configuration
+const whitelist = ['http://localhost:3000', 'https://kitchenapp-deployedfrontend.vercel.app'];
 const corsOptions = {
     origin: function (origin, callback) {
-        // Check if origin is allowed
-        if (
-            origin === process.env.FRONTEND_LOCAL_URL ||
-            origin === process.env.FRONTEND_VERCEL_URL
-        ) {
+        if (whitelist.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
