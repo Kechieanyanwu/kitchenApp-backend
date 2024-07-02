@@ -5,7 +5,7 @@ const {
     addNewItem,
     updateItem,
     deleteItem, 
-    countAllItems} = require('../controllers/controller');
+    countAllItems } = require('../controllers/controller');
 const { validateNewGroceryItem } = require('../../../utilities/model');
 const { Inventory } = require('../../../database/models/inventory');
 inventoryRouter.use(express.json()); 

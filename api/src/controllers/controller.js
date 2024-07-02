@@ -106,14 +106,14 @@ const moveCheckedItem = async (itemID, t) => {
     //add to inventory table
     await Inventory.create(newItem, { transaction: t });
 
-    await Checklist.destroy({ where: { id: itemID }, transaction: t })
+    await Checklist.destroy({ where: { id: itemID }, transaction: t });
     
     const updatedChecklist = await Checklist.findAll(
         { attributes: { exclude: ['date_created', 'date_updated'] }, 
             transaction: t });
 
     return updatedChecklist;
-}
+};
 
 
 module.exports = { 
