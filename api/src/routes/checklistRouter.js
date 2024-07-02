@@ -33,14 +33,14 @@ checklistRouter.get('/', async (req, res, next) => {
 
 //count all checklist items
 checklistRouter.get('/count', async (req, res, next) => {
-    let count;
+    let itemCount;
     try {
-        count = await countAllItems(Checklist, req.userId);
+        itemCount = await countAllItems(Checklist, req.userId);
     } catch (err) {
         next(err);
     }
-    console.log(count);
-    res.status(200).json( count );
+    console.log(itemCount);
+    res.status(200).json({ count: itemCount });
 });
 
 
