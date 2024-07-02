@@ -62,10 +62,12 @@ const userSchema = { //kinda like a DTO
 const countSchema = {
     type: 'object',
     properties: {
-        itemCount: { type: 'number ' },
+        count: { type: 'number ' },
     },
-    required: ['itemCount'],
+    required: ['count'],
 };
+
+
 
 module.exports = {
     categoriesSchema,
