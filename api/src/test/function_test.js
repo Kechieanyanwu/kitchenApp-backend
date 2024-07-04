@@ -79,48 +79,50 @@ describe('Controller Function tests', function () {
             });
         });
 
-        // describe('addNewItem', async () => { 
-        //     it('returns the newly added item', async () => {
-        //         const mockAddedItem = { id: 7, category_name: 'addNewItem test category', user_id: 1};
+        describe('addNewItem', async () => { 
+            it('returns the newly added item', async () => {
+                const mockAddedItem = { id: 7, category_name: 'addNewItem test category', user_id: 1};
 
-        //         //create dummy data
-        //         const mockRequestBody = { 'category_name': 'addNewItem test category', user_id: 1 };
+                //create dummy data
+                const mockRequestBody = { 'category_name': 'addNewItem test category', user_id: 1 };
 
-        //         //send to database using function
-        //         const newItem = await addNewItem(Category, mockRequestBody, t);
+                //send to database using function
+                const newItem = await addNewItem(Category, mockRequestBody, t);
 
-        //         //validate that the request was fulfilled
-        //         assert.deepEqual(newItem, mockAddedItem); 
+                //validate that the request was fulfilled
+                assert.deepEqual(newItem, mockAddedItem); 
 
-        //     });
-        // });
+            });
+        });
         
-        // describe('UpdateItem', async () => {
+        describe('UpdateItem', async () => {
 
-        //     it('returns the updated item', async() => {
-        //         //setup
-        //         const itemID = 1;
-        //         const update = { category_name: 'Update Category' };
-        //         const modelName = Category;
+            it('returns the updated item', async() => {
+                //setup
+                const itemID = 1;
+                const update = { category_name: 'Update Category' };
+                const modelName = Category;
+                const userID = 1;
 
-        //         const desiredUpdate = { id: 1, category_name: 'Update Category', user_id: 1 };
+                const desiredUpdate = { id: 1, category_name: 'Update Category', user_id: 1 };
                 
-        //         //update existing item
-        //         const actualUpdate = await updateItem(modelName, itemID, update, t);
+                //update existing item
+                const actualUpdate = await updateItem(modelName, itemID, userID, update, t);
         
-        //         //assert that the item is now updated to the mock item
-        //         assert.deepEqual(actualUpdate, desiredUpdate); 
-        //     });
+                //assert that the item is now updated to the mock item
+                assert.deepEqual(actualUpdate, desiredUpdate); 
+            });
 
-        //     it('throws an error if a nonexistent ID is specified', async () => {
-        //         const requestedID = 10;
-        //         const modelName = Category;
-        //         const update = { category_name: 'Update Category' };
+            it('throws an error if a nonexistent ID is specified', async () => {
+                const requestedID = 10;
+                const modelName = Category;
+                const userID = 1;
+                const update = { category_name: 'Update Category' };
 
-        //         await assert.isRejected(updateItem(modelName, requestedID, update, t), nonExistentItemError); 
-        //     });
+                await assert.isRejected(updateItem(modelName, requestedID,userID, update, t), nonExistentItemError); 
+            });
 
-        // });
+        });
 
         // describe("Get Item", async () => {
         //     it("returns the requested item specified by ID", async () => {

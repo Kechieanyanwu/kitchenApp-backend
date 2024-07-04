@@ -61,7 +61,7 @@ inventoryRouter.put('/:itemID', async (req, res, next) => {
     let updatedItem;
 
     try {
-        updatedItem = await updateItem(Inventory, itemID, update);
+        updatedItem = await updateItem(Inventory, itemID, req.userId, update);
     } catch (err) {
         next(err);
     }

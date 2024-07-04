@@ -65,6 +65,7 @@ const addNewItem = async(modelName, newItem, t) => {
 };
 
 const updateItem = async(modelName, itemID, userID, desiredUpdate, t) => { //adding user ID
+    // Item.findOne({ where: { id: itemID, userId: userID } });
     const item = await modelName.findByPk(itemID, 
         {
             where: {
@@ -87,18 +88,6 @@ const updateItem = async(modelName, itemID, userID, desiredUpdate, t) => { //add
     }
 };
 
-// const updateItem = async(modelName, itemID, desiredUpdate, t) => {
-//     const item = await validateID(itemID, modelName, t);
-//     await item.update(desiredUpdate, { transaction: t });
-
-//     // remove these columns from result
-//     delete item.dataValues.date_created;
-//     delete item.dataValues.date_updated;
-
-//     //return updated item 
-//     return item.dataValues;
-
-// };
 
 const deleteItem = async (modelName, itemID, t) => {
     const item = await validateID(itemID, modelName, t);
@@ -118,25 +107,42 @@ const deleteItem = async (modelName, itemID, t) => {
     }
 };
 
-const moveCheckedItem = async (itemID, t) => {
-    let item = await validateID(itemID, Checklist, t);
+const moveCheckedItem = async (itemID, userID, t) => {
+    const item = await Checklist.findOne({ 
+        where: { 
+            id: itemID, 
+            user_id: userID 
+        }, 
+        transaction: t 
+    });
 
-    const newItem = item.get({ transaction: t });
+    if (item === null) {
+        throw nonExistentItemError;
+    } else {
 
-    //remove unnecessary values
-    delete newItem.id;
-    delete newItem.purchased;
+        // Create a new item object excluding unnecessary values
+        const newItem = {
+            ...item.get({ plain: true }),
+            id: undefined,      // remove id
+            purchased: undefined // remove purchased
+        };
+        // const newItem = item.get({ transaction: t });
+
+        // //remove unnecessary values
+        // delete newItem.id;
+        // delete newItem.purchased;
     
-    //add to inventory table
-    await Inventory.create(newItem, { transaction: t });
+        //add to inventory table
+        await Inventory.create(newItem, { transaction: t });
 
-    await Checklist.destroy({ where: { id: itemID }, transaction: t });
+        await Checklist.destroy({ where: { id: itemID }, transaction: t });
     
-    const updatedChecklist = await Checklist.findAll(
-        { attributes: { exclude: ['date_created', 'date_updated'] }, 
-            transaction: t });
+        const updatedChecklist = await Checklist.findAll(
+            { attributes: { exclude: ['date_created', 'date_updated'] }, 
+                transaction: t });
 
-    return updatedChecklist;
+        return updatedChecklist;
+    }
 };
 
 

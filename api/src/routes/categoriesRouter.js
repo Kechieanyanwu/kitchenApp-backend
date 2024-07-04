@@ -52,7 +52,7 @@ categoriesRouter.put('/:itemID', async (req, res, next) => {
     let updatedCategory;
 
     try {
-        updatedCategory = await updateItem(Category, itemID, update);
+        updatedCategory = await updateItem(Category, itemID, req.userId, update);
     } catch (err) {
         next(err);
     }

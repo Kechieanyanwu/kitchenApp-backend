@@ -69,14 +69,14 @@ checklistRouter.put('/:itemID', async (req, res, next) => {
         let updatedChecklist;
         // eslint-disable-next-line no-useless-catch
         try {
-            updatedChecklist = await moveCheckedItem(itemID);
+            updatedChecklist = await moveCheckedItem(itemID, req.userId); //to update 
         } catch (err) {
             throw (err);
         }
         res.status(200).send(updatedChecklist);
     } else {
         try {
-            updatedItem = await updateItem(Checklist, itemID, update);
+            updatedItem = await updateItem(Checklist, itemID, req.userId, update);
         } catch (err) {
             next(err);
         }
