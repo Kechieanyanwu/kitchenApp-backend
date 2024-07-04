@@ -22,13 +22,13 @@ const countAllItems = async (modelName, userID, t) => {
 };
 
 const getItem = async (modelName, itemID, userID, t) => {
-    const requestedItem = await modelName.findByPk(itemID, 
-        {
-            where: {
-                user_id: userID
-            }
+    const requestedItem = await modelName.findOne({ 
+        where: { 
+            id: itemID, 
+            user_id: userID 
         }, 
-        { transaction: t });
+        transaction: t 
+    });
 
     if (requestedItem === null) {
         throw nonExistentItemError;
@@ -64,15 +64,14 @@ const addNewItem = async(modelName, newItem, t) => {
     }
 };
 
-const updateItem = async(modelName, itemID, userID, desiredUpdate, t) => { //adding user ID
-    // Item.findOne({ where: { id: itemID, userId: userID } });
-    const item = await modelName.findByPk(itemID, 
-        {
-            where: {
-                user_id: userID
-            }
+const updateItem = async(modelName, itemID, userID, desiredUpdate, t) => {
+    const item = await modelName.findOne({ 
+        where: { 
+            id: itemID, 
+            user_id: userID 
         }, 
-        { transaction: t });
+        transaction: t 
+    });
 
     if (item === null) {
         throw nonExistentItemError;

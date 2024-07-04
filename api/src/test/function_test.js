@@ -46,6 +46,7 @@ describe('Controller Function tests', function () {
             it('returns the requested item specified by ID', async () => {
                 const requestedID = 2;
                 const modelName = Category;
+                const userID = 1;
                 const requestedItem =           
                 {
                     id: 2,
@@ -53,7 +54,7 @@ describe('Controller Function tests', function () {
                     user_id: 1,
                 };
 
-                const categoryItem = await getItem(modelName, requestedID, t); 
+                const categoryItem = await getItem(modelName, requestedID, userID,  t); 
 
                 assert.deepEqual(requestedItem, categoryItem);
             });
@@ -61,8 +62,9 @@ describe('Controller Function tests', function () {
             it('throws an error if a nonexistent ID is specified', async () => {
                 const requestedID = 10;
                 const modelName = Category;
+                const userID = 1;
 
-                await assert.isRejected(getItem(modelName, requestedID, t), nonExistentItemError); 
+                await assert.isRejected(getItem(modelName, requestedID, userID, t), nonExistentItemError); 
             });
         });
 
