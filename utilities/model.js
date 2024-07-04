@@ -60,9 +60,13 @@ const validateNewCategory = (req, res, next) => {
     }
 };
 
-const validateID = async (itemID, modelName, t) => {
-    const item = await modelName.findByPk(itemID, 
-        { transaction: t });
+const findItem = async (itemID, modelName, userID, t) => { //to update to be where userID
+    const item = await modelName.findByPk({
+        where: {
+            user_id: userID
+        }
+    }, 
+    { transaction: t });
 
     if (item === null) {
         throw nonExistentItemError;
@@ -99,7 +103,7 @@ const validateNewUser = (req, res, next) => {
 module.exports = {
     validateNewCategory,
     validateNewGroceryItem,
-    validateID,
+    findItem,
     validateNewUser,
     incompleteUserError,
     nonExistentItemError

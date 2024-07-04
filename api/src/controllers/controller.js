@@ -3,7 +3,7 @@ const { sequelize } = require('../../../database/models');
 const { Checklist } = require('../../../database/models/checklist');
 const { Inventory } = require('../../../database/models/inventory');
 const { nonExistentItemError } = require('../../../utilities/errors');
-const { validateID } = require('../../../utilities/model');
+const { findItem } = require('../../../utilities/model');
 
 const getAllItems = async (modelName, userID, t) => { 
     const items = await modelName.findAll({
@@ -38,7 +38,7 @@ const getItem = async (modelName, itemID, userID, t) => {
     }
 };
 
- // To update to include userID
+
 const addNewItem = async(modelName, newItem, t) => {
     console.log('in add new item'); //test
     try {
@@ -63,8 +63,8 @@ const addNewItem = async(modelName, newItem, t) => {
     }
 };
 
-const updateItem = async(modelName, itemID, desiredUpdate, t) => { 
-    const item = await validateID(itemID, modelName, t);
+const updateItem = async(modelName, itemID, userID, desiredUpdate, t) => { //adding user ID
+    const item = await findItem(itemID, modelName, userID, t); //to modify to include user. Is this even necessarty? 
     await item.update(desiredUpdate, { transaction: t });
 
     // remove these columns from result
@@ -74,7 +74,20 @@ const updateItem = async(modelName, itemID, desiredUpdate, t) => {
     //return updated item 
     return item.dataValues;
 
-}
+};
+
+// const updateItem = async(modelName, itemID, desiredUpdate, t) => {
+//     const item = await validateID(itemID, modelName, t);
+//     await item.update(desiredUpdate, { transaction: t });
+
+//     // remove these columns from result
+//     delete item.dataValues.date_created;
+//     delete item.dataValues.date_updated;
+
+//     //return updated item 
+//     return item.dataValues;
+
+// };
 
 const deleteItem = async (modelName, itemID, t) => {
     const item = await validateID(itemID, modelName, t);
