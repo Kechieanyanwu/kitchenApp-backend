@@ -125,16 +125,11 @@ const moveCheckedItem = async (itemID, userID, t) => {
             id: undefined,      // remove id
             purchased: undefined // remove purchased
         };
-        // const newItem = item.get({ transaction: t });
-
-        // //remove unnecessary values
-        // delete newItem.id;
-        // delete newItem.purchased;
     
         //add to inventory table
         await Inventory.create(newItem, { transaction: t });
 
-        await Checklist.destroy({ where: { id: itemID }, transaction: t });
+        await Checklist.destroy({ where: { id: itemID, user_id: userID }, transaction: t });
     
         const updatedChecklist = await Checklist.findAll(
             { attributes: { exclude: ['date_created', 'date_updated'] }, 
