@@ -61,7 +61,7 @@ const validateNewCategory = (req, res, next) => {
 };
 
 const findItem = async (itemID, modelName, userID, t) => { //to update to be where userID
-    const item = await modelName.findByPk({
+    const item = await modelName.findByPk(itemID, {
         where: {
             user_id: userID
         }

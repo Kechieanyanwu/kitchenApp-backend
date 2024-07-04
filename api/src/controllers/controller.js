@@ -29,6 +29,7 @@ const getItem = async (modelName, itemID, userID, t) => {
             }
         }, 
         { transaction: t });
+
     if (requestedItem === null) {
         throw nonExistentItemError;
     } else {
@@ -64,16 +65,26 @@ const addNewItem = async(modelName, newItem, t) => {
 };
 
 const updateItem = async(modelName, itemID, userID, desiredUpdate, t) => { //adding user ID
-    const item = await findItem(itemID, modelName, userID, t); //to modify to include user. Is this even necessarty? 
-    await item.update(desiredUpdate, { transaction: t });
+    const item = await modelName.findByPk(itemID, 
+        {
+            where: {
+                user_id: userID
+            }
+        }, 
+        { transaction: t });
 
-    // remove these columns from result
-    delete item.dataValues.date_created;
-    delete item.dataValues.date_updated;
+    if (item === null) {
+        throw nonExistentItemError;
+    } else {
+        await item.update(desiredUpdate, { transaction: t });
 
-    //return updated item 
-    return item.dataValues;
-
+        // remove these columns from result
+        delete item.dataValues.date_created;
+        delete item.dataValues.date_updated;
+    
+        //return updated item 
+        return item.dataValues;
+    }
 };
 
 // const updateItem = async(modelName, itemID, desiredUpdate, t) => {
