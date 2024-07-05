@@ -11,7 +11,7 @@ const server  = require('../../index');
 const { categoriesSchema,
     checklistSchema,
     inventorySchema, 
-    countSchema} = require('../models/model');
+    countSchema } = require('../models/model');
 
 // Controller Imports
 const { getAllItems } = require('../controllers/controller');

@@ -1,9 +1,7 @@
 // Model and Sequelize Imports
-const { sequelize } = require('../../../database/models'); 
 const { Checklist } = require('../../../database/models/checklist');
 const { Inventory } = require('../../../database/models/inventory');
 const { nonExistentItemError } = require('../../../utilities/errors');
-const { findItem } = require('../../../utilities/model');
 
 
 const getAllItems = async (modelName, userID, t) => { 
@@ -19,7 +17,8 @@ const getAllItems = async (modelName, userID, t) => {
 
 const countAllItems = async (modelName, userID, t) => {
     const count = await modelName.count({
-        where: { user_id: userID }
+        where: { user_id: userID },
+        transaction: t 
     });
     return count;
 };
@@ -39,33 +38,24 @@ const getItem = async (modelName, itemID, userID, t) => {
         throw nonExistentItemError;
     } else {
         return requestedItem;
-        // return requestedItem.dataValues;
     }
 };
 
 
 const addNewItem = async(modelName, newItem, t) => {
-    console.log('in add new item'); //test
-    try {
-        const addedItem = await modelName.create(newItem,
-            { transaction: t });
+    const addedItem = await modelName.create(newItem,
+        { transaction: t });
 
-        // remove these columns from result
-        delete addedItem.dataValues.date_created;
-        delete addedItem.dataValues.date_updated;
+    delete addedItem.dataValues.date_created;
+    delete addedItem.dataValues.date_updated;
 
-        if (modelName.name == 'User') {
-            delete addedItem.dataValues.hashed_password;
-            delete addedItem.dataValues.salt;
-        }
-
-        console.log('Added items', addedItem.dataValues); //test
-        return addedItem.dataValues;
-
-    } catch (err) {
-        console.log(err); //test
-        throw err;
+    if (modelName.name == 'User') {
+        delete addedItem.dataValues.hashed_password;
+        delete addedItem.dataValues.salt;
     }
+
+    return addedItem.dataValues;
+
 };
 
 const updateItem = async(modelName, itemID, userID, desiredUpdate, t) => {
@@ -79,16 +69,13 @@ const updateItem = async(modelName, itemID, userID, desiredUpdate, t) => {
     });
 
     if (item === null) {
-        console.log('nonexistem item ', itemID); //test
         throw nonExistentItemError;
     } else {
         await item.update(desiredUpdate, { transaction: t });
 
-        // remove these columns from result
         delete item.dataValues.date_created;
         delete item.dataValues.date_updated;
     
-        //return updated item 
         return item.dataValues;
     }
 };
@@ -98,7 +85,6 @@ const deleteItem = async (modelName, itemID, userID, t) => {
     let item;
 
     if (modelName.name === 'User') {
-        // item = await modelName.findByPk(userID, { transaction: t });
         item = await modelName.findOne({
             where: {
                 id: itemID,
@@ -144,14 +130,12 @@ const moveCheckedItem = async (itemID, userID, t) => {
         throw nonExistentItemError;
     } else {
 
-        // Create a new item object excluding unnecessary values
         const newItem = {
             ...item.get({ plain: true }),
-            id: undefined,      // remove id
-            purchased: undefined // remove purchased
+            id: undefined,
+            purchased: undefined
         };
-    
-        //add to inventory table
+
         await Inventory.create(newItem, { transaction: t });
 
         await Checklist.destroy({ where: { id: itemID, user_id: userID }, transaction: t });

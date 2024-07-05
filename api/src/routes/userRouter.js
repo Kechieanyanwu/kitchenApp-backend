@@ -20,6 +20,7 @@ userRouter.post('/register', validateNewUser, async (req, res, next) => {
         salt: salt
     };
     let addedUser;
+
     try {        
         addedUser = await addNewItem(User, userObject);
     } catch (err) {
@@ -31,10 +32,10 @@ userRouter.post('/register', validateNewUser, async (req, res, next) => {
 });
 
 // user delete 
-// to implement permissions. Only admin should have permission for this 
+// Is this secure enough? A user can only delete their own account. Might change implementation because how does frontend get the userID?
 userRouter.delete('/:itemID', isJWTAuth, populateUser, async (req, res, next) => {
     try {
-        await deleteItem(User, req.userId); //to change this to not return any updated users
+        await deleteItem(User, req.userId);
     } catch (err) {
         next(err);
     }
@@ -44,8 +45,8 @@ userRouter.delete('/:itemID', isJWTAuth, populateUser, async (req, res, next) =>
 
 
 
+// eslint-disable-next-line no-unused-vars
 const errorHandler = (err, req, res, next) => {
-    console.log(err.message); //test
     res.status(err.status || 500).send(err.message);
 };
 

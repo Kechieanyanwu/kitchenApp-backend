@@ -20,11 +20,13 @@ categoriesRouter.use(populateUser);
 //get all categories
 categoriesRouter.get('/', async (req, res, next) => {
     let categoriesArray;
+    
     try {
         categoriesArray = await getAllItems(Category, req.userId); 
     } catch (err) {
         next(err);
     }
+
     res.status(200).json(categoriesArray);
 });
 
@@ -40,6 +42,7 @@ categoriesRouter.post('/', validateNewCategory, async (req, res, next) => {
     } catch (err) {
         next(err);
     }
+
     res.status(201).send(addedCategory); 
 });
 
@@ -69,13 +72,14 @@ categoriesRouter.delete('/:itemID', async (req, res, next) => {
     } catch (err) {
         next(err);
     }
+    
     res.status(200).send(updatedCategories);
 
 });
 
 
+// eslint-disable-next-line no-unused-vars
 const errorHandler = (err, req, res, next) => {
-    console.log('in categories error handler'); //test
     res.status(err.status || 500).send(err.message);
 };
 
