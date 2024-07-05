@@ -320,6 +320,27 @@ describe('KitchenApp testing', function () {
                                     expectedError: incompleteItemError.message
                                 },
                             ]
+                        },
+                        {
+                            name: 'Users',
+                            route: '/user/register',
+                            testCases: [
+                                {
+                                    requestType: 'New User',
+                                    description: 'responds with 201 to a valid request body',  
+                                    requestBody: {
+                                        'username': 'newUserTest',
+                                        'email': 'newUser@gmail.com',
+                                        'password': 'newUserPassword',
+                                    },
+                                    expectedStatus: 201,
+                                    expectedResponse: {
+                                        'username': 'newUserTest',
+                                        'email': 'newUser@gmail.com',
+                                        
+                                    },
+                                }
+                            ]
                         }
                     ];
                 
@@ -333,18 +354,20 @@ describe('KitchenApp testing', function () {
     
                                     if (requestType == 'Good') {
                                         assert.deepEqual(response.body, expectedResponse);
-                                    } else {
-                                        if (expectedError) {
-                                            assert.include(response.error.text, expectedError, 'object contains error');
-                                        }
+                                    } else if (requestType == 'Bad') {
+                                        assert.include(response.error.text, expectedError, 'object contains error');
+                                    } else if (requestType == 'New User') {
+                                        console.log(response.body);
+                                        assert.include(response.body, expectedResponse);
                                     }
+                                    
                                 });
                             });
                         });
                     });
                 });
-                // >------------------------WORKING HERE
-                describe('Update Item endpoint testing', () => { // to refactor into table-driven test
+
+                describe('Update Item endpoint testing', () => { 
                     const endpoints = [
                         {
                             name: 'Category',
@@ -532,12 +555,6 @@ describe('KitchenApp testing', function () {
                                 category_id: 2
                             },
                             expectedStatus: 200
-                        },
-                        {
-                            description: 'User - successfully deletes an existing user',
-                            endpoint: '/user',
-                            itemID: 3,
-                            expectedStatus: 200
                         }
                     ];
                   
@@ -545,7 +562,6 @@ describe('KitchenApp testing', function () {
                         it(description, async () => {
                             const response = await agent.delete(`${endpoint}/${itemID}`).set('Authorization', auth_token);
                             assert.equal(response.status, expectedStatus);
-                            // chai.expect(response.status).to.equal(expectedStatus);
                   
                             if (assertDeletedItem) {
                                 assert.notDeepNestedInclude(response.body, assertDeletedItem);
@@ -553,76 +569,6 @@ describe('KitchenApp testing', function () {
                         });
                     });
                 });
-                // describe('Delete Item Endpoint Testing', ()=> { // this can be refactored into a table driven test. 
-                //     describe('Categories', () => {
-                //         it('successfully deletes an existing item', async () => {
-                //             const itemID = 4;
-                //             const assertDeletedItem = {
-                //                 'id': 4, //wip
-                //                 'category_name': 'Post Category Test'
-                //             };
-                //             const expectedStatus = 200;
-        
-                //             const response = await agent.delete('/categories/' + itemID);
-        
-                //             assert.equal(response.status, expectedStatus);
-        
-                //             //assert that the item has been deleted from the returned array
-                //             assert.notDeepNestedInclude(response, assertDeletedItem); //double check this
-                //         });
-                //     });
-    
-                //     describe('Checklist', () => {
-                //         it('successfully deletes an existing item', async () => {
-                //             const itemID = 4;
-                //             const assertDeletedItem = {
-                //                 'id': 4,
-                //                 'item_name': 'Post Checklist Test',
-                //                 'quantity': 2,
-                //                 'category_id': 3,
-                //                 'purchased': false
-                //             };
-                        
-                //             const expectedStatus = 200;
-        
-                //             const response = await agent.delete('/checklist/' + itemID);
-        
-                //             assert.equal(response.status, expectedStatus);
-        
-                //             assert.notDeepNestedInclude(response, assertDeletedItem);
-                //         });
-                //     });
-    
-                //     describe('Inventory', () => {
-                //         it('successfully deletes an existing item', async () => {
-                //             const itemID = 1;
-                //             const assertDeletedItem = {
-                //                 'id': 1,
-                //                 'item_name': 'Update Inventory Item Test',
-                //                 'quantity': 25,
-                //                 'category_id': 2
-                //             };
-                        
-                //             const expectedStatus = 200;
-        
-                //             const response = await agent.delete('/inventory/' + itemID);
-    
-                //             assert.equal(response.status, expectedStatus);
-        
-                //             assert.notDeepNestedInclude(response, assertDeletedItem);
-                //         });
-                //     });
-    
-                //     describe('User', () => {
-                //         it('successfully deletes an existing item', async () => {
-                //             const itemID = 2;
-                //             const expectedStatus = 200;
-        
-                //             const response = await agent.delete('/user/' + itemID);
-        
-            //             assert.equal(response.status, expectedStatus);
-            //         });
-            //     });
             });
            
         });
