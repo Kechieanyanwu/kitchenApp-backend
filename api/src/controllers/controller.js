@@ -5,11 +5,14 @@ const { Inventory } = require('../../../database/models/inventory');
 const { nonExistentItemError } = require('../../../utilities/errors');
 const { findItem } = require('../../../utilities/model');
 
+
 const getAllItems = async (modelName, userID, t) => { 
     const items = await modelName.findAll({
-        where: { user_id: userID }
-    },
-    { raw: true, attributes: { exclude: ['date_created', 'date_updated'] }, transaction: t });
+        where: { user_id: userID },
+        raw: true, 
+        attributes: { exclude: ['date_created', 'date_updated'] }, 
+        transaction: t
+    });
     return items;
 };
 
@@ -27,15 +30,16 @@ const getItem = async (modelName, itemID, userID, t) => {
             id: itemID, 
             user_id: userID 
         }, 
+        raw: true,
+        attributes: { exclude: ['date_created', 'date_updated'] },
         transaction: t 
     });
 
     if (requestedItem === null) {
         throw nonExistentItemError;
     } else {
-        delete requestedItem.dataValues.date_created;
-        delete requestedItem.dataValues.date_updated;
-        return requestedItem.dataValues;
+        return requestedItem;
+        // return requestedItem.dataValues;
     }
 };
 

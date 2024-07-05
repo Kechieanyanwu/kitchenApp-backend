@@ -46,7 +46,7 @@ userRouter.delete('/:itemID', isJWTAuth, populateUser, async (req, res, next) =>
 
 
 
-const errorHandler = (err, req, res) => {
+const errorHandler = (err, req, res, next) => {
     res.status(err.status).send(err.message);
 };
 
