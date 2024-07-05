@@ -33,21 +33,20 @@ userRouter.post('/register', validateNewUser, async (req, res, next) => {
 // user delete 
 // to implement permissions. Only admin should have permission for this 
 userRouter.delete('/:itemID', isJWTAuth, populateUser, async (req, res, next) => {
-    let updatedUsers;
-
     try {
-        updatedUsers = await deleteItem(User, req.userId); //to change this to not return any updated users
+        await deleteItem(User, req.userId); //to change this to not return any updated users
     } catch (err) {
         next(err);
     }
-    res.status(200).send(updatedUsers);
+    res.status(200).send();
 });
 
 
 
 
 const errorHandler = (err, req, res, next) => {
-    res.status(err.status).send(err.message);
+    console.log(err.message); //test
+    res.status(err.status || 500).send(err.message);
 };
 
 userRouter.use(errorHandler);

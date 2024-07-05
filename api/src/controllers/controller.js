@@ -94,21 +94,40 @@ const updateItem = async(modelName, itemID, userID, desiredUpdate, t) => {
 };
 
 
-const deleteItem = async (modelName, itemID, t) => {
-    const item = await validateID(itemID, modelName, t);
+const deleteItem = async (modelName, itemID, userID, t) => {
+    let item;
+
+    if (modelName.name === 'User') {
+        // item = await modelName.findByPk(userID, { transaction: t });
+        item = await modelName.findOne({
+            where: {
+                id: itemID,
+            },
+            transaction: t
+        });
+    } else {
+        item = await modelName.findOne({
+            where: {
+                id: itemID,
+                user_id: userID
+            },
+            transaction: t
+        });
+    }
+
+    if (!item) {
+        throw nonExistentItemError;
+    }
 
     await item.destroy({ transaction: t });
 
-    if (modelName.name != 'User') { // not returning an array of users for privacy sake
-        const items = await modelName.findAll(
-            {
-                raw: true,
-                attributes: { exclude: ['date_created', 'date_updated'] },
-                transaction: t
-            });
-        return items; 
-    } else {
-        return;
+    if (modelName.name !== 'User') {
+        const items = await modelName.findAll({
+            raw: true,
+            attributes: { exclude: ['date_created', 'date_updated'] },
+            transaction: t
+        });
+        return items;
     }
 };
 

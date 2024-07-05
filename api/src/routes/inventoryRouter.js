@@ -75,7 +75,7 @@ inventoryRouter.delete('/:itemID', async (req, res, next) => {
     let updatedInventory;
 
     try {
-        updatedInventory = await deleteItem(Inventory, itemID);
+        updatedInventory = await deleteItem(Inventory, itemID, req.userId);
     } catch (err) {
         next(err);
     }
@@ -87,7 +87,7 @@ inventoryRouter.delete('/:itemID', async (req, res, next) => {
 
 
 const errorHandler = (err, req, res, next) => {
-    res.status(err.status).send(err.message);
+    res.status(err.status || 500).send(err.message);
 };
 
 inventoryRouter.use(errorHandler);

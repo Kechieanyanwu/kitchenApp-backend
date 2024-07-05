@@ -72,7 +72,7 @@ describe('Controller Function tests', function () {
             it('counts all the items in a user\'s inventory', async () => {
                 const userID = 1;
                 const modelName = Category;
-                const expectedCount = 6; //currently 6 but should be 5 when all tests show
+                const expectedCount = 5;
                 
                 const count = await countAllItems(modelName,userID, t);
 

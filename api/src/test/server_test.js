@@ -489,13 +489,67 @@ describe('KitchenApp testing', function () {
                                         //assert that the item is now in the inventory
                                         const inventoryArray = await getAllItems(Inventory, 1);
                                         const plainInventoryArray = JSON.parse(JSON.stringify(inventoryArray));
-                                        console.log(includedItem);
-                                        console.log(plainInventoryArray);
-                                        // assert.deepNestedInclude(inventoryArray, includedItem);
                                         assert.deepNestedInclude(plainInventoryArray, includedItem);
                                     }
                                 });
                             });
+                        });
+                    });
+                });
+                describe('Delete Item Endpoint Testing', () => {
+                    const testCases = [
+                        {
+                            description: 'Categories - successfully deletes an existing item',
+                            endpoint: '/categories',
+                            itemID: 4,
+                            assertDeletedItem: {
+                                id: 4,
+                                category_name: 'Post Category Test'
+                            },
+                            expectedStatus: 200
+                        },
+                        {
+                            description: 'Checklist - successfully deletes an existing item',
+                            endpoint: '/checklist',
+                            itemID: 4,
+                            assertDeletedItem: {
+                                id: 4,
+                                item_name: 'Post Checklist Test',
+                                quantity: 2,
+                                category_id: 3,
+                                purchased: false
+                            },
+                            expectedStatus: 200
+                        },
+                        {
+                            description: 'Inventory - successfully deletes an existing item',
+                            endpoint: '/inventory',
+                            itemID: 1,
+                            assertDeletedItem: {
+                                id: 1,
+                                item_name: 'Update Inventory Item Test',
+                                quantity: 25,
+                                category_id: 2
+                            },
+                            expectedStatus: 200
+                        },
+                        {
+                            description: 'User - successfully deletes an existing user',
+                            endpoint: '/user',
+                            itemID: 3,
+                            expectedStatus: 200
+                        }
+                    ];
+                  
+                    testCases.forEach(({ description, endpoint, itemID, assertDeletedItem, expectedStatus }) => {
+                        it(description, async () => {
+                            const response = await agent.delete(`${endpoint}/${itemID}`).set('Authorization', auth_token);
+                            assert.equal(response.status, expectedStatus);
+                            // chai.expect(response.status).to.equal(expectedStatus);
+                  
+                            if (assertDeletedItem) {
+                                assert.notDeepNestedInclude(response.body, assertDeletedItem);
+                            }
                         });
                     });
                 });

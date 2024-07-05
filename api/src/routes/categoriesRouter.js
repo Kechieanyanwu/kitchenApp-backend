@@ -65,7 +65,7 @@ categoriesRouter.delete('/:itemID', async (req, res, next) => {
     let updatedCategories;
 
     try {
-        updatedCategories = await deleteItem(Category, itemID);
+        updatedCategories = await deleteItem(Category, itemID, req.userId);
     } catch (err) {
         next(err);
     }
@@ -76,7 +76,7 @@ categoriesRouter.delete('/:itemID', async (req, res, next) => {
 
 const errorHandler = (err, req, res, next) => {
     console.log('in categories error handler'); //test
-    res.status(err.status).send(err.message);
+    res.status(err.status || 500).send(err.message);
 };
 
 categoriesRouter.use(errorHandler);

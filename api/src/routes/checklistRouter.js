@@ -89,7 +89,7 @@ checklistRouter.delete('/:itemID', async (req, res, next) => {
     let updatedChecklist;
 
     try {
-        updatedChecklist = await deleteItem(Checklist, itemID);
+        updatedChecklist = await deleteItem(Checklist, itemID,req.userId);
     } catch (err) {
         next(err);
     }
@@ -99,7 +99,7 @@ checklistRouter.delete('/:itemID', async (req, res, next) => {
 
 
 const errorHandler = (err, req, res, next) => {
-    res.status(err.status).send(err.message);
+    res.status(err.status || 500).send(err.message);
 };
 
 checklistRouter.use(errorHandler);
