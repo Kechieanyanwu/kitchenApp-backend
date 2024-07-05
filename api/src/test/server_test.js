@@ -347,7 +347,7 @@ describe('KitchenApp testing', function () {
                 describe('Update Item endpoint testing', () => { // to refactor into table-driven test
                     const endpoints = [
                         {
-                            name: 'Categories',
+                            name: 'Category',
                             route: '/categories',
                             testCases: [
                                 {
@@ -358,22 +358,65 @@ describe('KitchenApp testing', function () {
                                     expectedResponse: { id: 1, category_name: 'Update Category Test', 'user_id': 1 },
                                     expectedStatus: 200,
                                 },
+                                {
+                                    requestType: 'Bad',
+                                    description: 'returns an error for a nonexistent category',
+                                    requestBody: { category_name: 'Update Category Test' },
+                                    itemID: 11,
+                                    expectedError: nonExistentItemError,
+                                    expectedStatus: 400,
+                                },
                             ] 
                         },
-                        // {
-                        //     name: 'Inventory',
-                        //     route: '/inventory',
-                        //     testCases: [
-
-                        //     ] 
-                        // },
-                        // {
-                        //     name: 'Checklist',
-                        //     route: '/checklist',
-                        //     testCases: [
-
-                        //     ] 
-                        // },
+                        {
+                            name: 'Inventory',
+                            route: '/inventory',
+                            testCases: [
+                                {
+                                    requestType: 'Good',
+                                    description: 'correctly returns an updated inventory item',
+                                    requestBody: {
+                                        'item_name': 'Update Inventory Item Test',
+                                        'quantity': 25,
+                                        'category_id': 2,
+                                    },
+                                    itemID: 1,
+                                    expectedResponse: {
+                                        'id': 1,
+                                        'item_name': 'Update Inventory Item Test',
+                                        'quantity': 25,
+                                        'category_id': 2,
+                                        'user_id': 1
+                                    },
+                                    expectedStatus: 200,
+                                },
+                            ] 
+                        },
+                        {
+                            name: 'Checklist',
+                            route: '/checklist',
+                            testCases: [
+                                {
+                                    requestType: 'Good',
+                                    description: 'Correctly returns an updated unpurchased checklist item',
+                                    requestBody: {
+                                        'item_name': 'Update Checklist Item Test',
+                                        'quantity': 13,
+                                        'category_id': 1,
+                                    },
+                                    itemID: 1,
+                                    expectedResponse: {
+                                        'id': 1,
+                                        'item_name': 'Update Checklist Item Test',
+                                        'quantity': 13,
+                                        'category_id': 1,
+                                        'purchased': false,
+                                        'user_id': 1
+                                    },
+                                    expectedStatus: 200,
+                                },
+                            ] 
+                        },
 
                     ];
 
@@ -386,10 +429,12 @@ describe('KitchenApp testing', function () {
                                     assert.equal(response.status, expectedStatus);
     
                                     if (requestType == 'Good') {
+                                        // assert.equal(response.status, expectedStatus);
                                         assert.deepEqual(response.body, expectedResponse);
                                     } else {
-                                        if (expectedError) {
-                                            assert.include(response.error.text, expectedError, 'object contains error');
+                                        if (expectedError) { //to work here after adding sad path
+                                            // assert.include(response.error.text, expectedError, 'object contains error');
+                                            assert.deepEqual(response.error.text, expectedError.message);
                                         }
                                     }
                                 });

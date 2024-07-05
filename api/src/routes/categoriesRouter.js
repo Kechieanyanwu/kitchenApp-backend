@@ -54,6 +54,7 @@ categoriesRouter.put('/:itemID', async (req, res, next) => {
     try {
         updatedCategory = await updateItem(Category, itemID, req.userId, update);
     } catch (err) {
+        console.log('error is ', err); //test
         next(err);
     }
 
@@ -75,7 +76,7 @@ categoriesRouter.delete('/:itemID', async (req, res, next) => {
 });
 
 
-const errorHandler = (err, req, res) => {
+const errorHandler = (err, req, res, next) => {
     console.log('in categories error handler'); //test
     res.status(err.status).send(err.message);
 };

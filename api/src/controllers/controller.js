@@ -65,6 +65,7 @@ const addNewItem = async(modelName, newItem, t) => {
 };
 
 const updateItem = async(modelName, itemID, userID, desiredUpdate, t) => {
+    console.log('finding item ', itemID); //test
     const item = await modelName.findOne({ 
         where: { 
             id: itemID, 
@@ -74,6 +75,7 @@ const updateItem = async(modelName, itemID, userID, desiredUpdate, t) => {
     });
 
     if (item === null) {
+        console.log('nonexistem item ', itemID); //test
         throw nonExistentItemError;
     } else {
         await item.update(desiredUpdate, { transaction: t });
