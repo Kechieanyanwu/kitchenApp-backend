@@ -11,7 +11,7 @@ const server  = require('../../index');
 const { categoriesSchema,
     checklistSchema,
     inventorySchema, 
-    countSchema} = require('../models/model');
+    countSchema } = require('../models/model');
 
 // Controller Imports
 const { getAllItems } = require('../controllers/controller');
@@ -320,6 +320,27 @@ describe('KitchenApp testing', function () {
                                     expectedError: incompleteItemError.message
                                 },
                             ]
+                        },
+                        {
+                            name: 'Users',
+                            route: '/user/register',
+                            testCases: [
+                                {
+                                    requestType: 'New User',
+                                    description: 'responds with 201 to a valid request body',  
+                                    requestBody: {
+                                        'username': 'newUserTest',
+                                        'email': 'newUser@gmail.com',
+                                        'password': 'newUserPassword',
+                                    },
+                                    expectedStatus: 201,
+                                    expectedResponse: {
+                                        'username': 'newUserTest',
+                                        'email': 'newUser@gmail.com',
+                                        
+                                    },
+                                }
+                            ]
                         }
                     ];
                 
@@ -333,257 +354,221 @@ describe('KitchenApp testing', function () {
     
                                     if (requestType == 'Good') {
                                         assert.deepEqual(response.body, expectedResponse);
-                                    } else {
-                                        if (expectedError) {
-                                            assert.include(response.error.text, expectedError, 'object contains error');
-                                        }
+                                    } else if (requestType == 'Bad') {
+                                        assert.include(response.error.text, expectedError, 'object contains error');
+                                    } else if (requestType == 'New User') {
+                                        console.log(response.body);
+                                        assert.include(response.body, expectedResponse);
+                                    }
+                                    
+                                });
+                            });
+                        });
+                    });
+                });
+
+                describe('Update Item endpoint testing', () => { 
+                    const endpoints = [
+                        {
+                            name: 'Category',
+                            route: '/categories',
+                            testCases: [
+                                {
+                                    requestType: 'Good',
+                                    description: 'correctly returns an updated category',
+                                    requestBody: { category_name: 'Update Category Test' },
+                                    itemID: 1,
+                                    expectedResponse: { id: 1, category_name: 'Update Category Test', 'user_id': 1 },
+                                    expectedStatus: 200,
+                                },
+                                {
+                                    requestType: 'Bad',
+                                    description: 'returns an error for a nonexistent category',
+                                    requestBody: { category_name: 'Update Category Test' },
+                                    itemID: 11,
+                                    expectedError: nonExistentItemError,
+                                    expectedStatus: 400,
+                                },
+                            ] 
+                        },
+                        {
+                            name: 'Inventory',
+                            route: '/inventory',
+                            testCases: [
+                                {
+                                    requestType: 'Good',
+                                    description: 'correctly returns an updated inventory item',
+                                    requestBody: {
+                                        'item_name': 'Update Inventory Item Test',
+                                        'quantity': 25,
+                                        'category_id': 2,
+                                    },
+                                    itemID: 1,
+                                    expectedResponse: {
+                                        'id': 1,
+                                        'item_name': 'Update Inventory Item Test',
+                                        'quantity': 25,
+                                        'category_id': 2,
+                                        'user_id': 1
+                                    },
+                                    expectedStatus: 200,
+                                },
+                                {
+                                    requestType: 'Bad',
+                                    description: 'returns an error for a nonexistent item',
+                                    requestBody: {
+                                        'item_name': 'Update Inventory Item Test',
+                                        'quantity': 25,
+                                        'category_id': 2,
+                                    },
+                                    itemID: 11,
+                                    expectedError: nonExistentItemError,
+                                    expectedStatus: 400,
+                                },
+                            ] 
+                        },
+                        {
+                            name: 'Checklist',
+                            route: '/checklist',
+                            testCases: [
+                                {
+                                    requestType: 'Good',
+                                    description: 'Correctly returns an updated unpurchased checklist item',
+                                    requestBody: {
+                                        'item_name': 'Update Checklist Item Test',
+                                        'quantity': 13,
+                                        'category_id': 1,
+                                    },
+                                    itemID: 1,
+                                    expectedResponse: {
+                                        'id': 1,
+                                        'item_name': 'Update Checklist Item Test',
+                                        'quantity': 13,
+                                        'category_id': 1,
+                                        'purchased': false,
+                                        'user_id': 1
+                                    },
+                                    expectedStatus: 200,
+                                },
+                                {
+                                    requestType: 'Bad',
+                                    description: 'returns an error for a nonexistent item',
+                                    requestBody: {
+                                        'item_name': 'Update Checklist Item Test',
+                                        'quantity': 13,
+                                        'category_id': 1,
+                                    },
+                                    itemID: 11,
+                                    expectedError: nonExistentItemError,
+                                    expectedStatus: 400,
+                                },
+                                {
+                                    requestType: 'Purchased Checklist Item',
+                                    description: 'correctly moves a purchased item to the inventory',
+                                    requestBody: {
+                                        'item_name': 'Update Checklist Item Test',
+                                        'quantity': 13,
+                                        'category_id': 1,
+                                        'purchased': true
+                                    },
+                                    itemID: 1,
+                                    deletedItem: {
+                                        'id': 1,
+                                        'item_name': 'Update Checklist Item Test',
+                                        'quantity': 13,
+                                        'category_id': 1,
+                                        'purchased': false
+                                    },
+                                    includedItem: {
+                                        'id': 7,
+                                        'item_name': 'Update Checklist Item Test',
+                                        'quantity': 13,
+                                        'category_id': 1,
+                                        'user_id': 1
+                                    },
+                                    expectedStatus: 200,
+                                },
+                            ] 
+                        },
+
+                    ];
+
+                    endpoints.forEach((endpoint) => {
+                        describe(`${endpoint.name}`, () => {
+                            endpoint.testCases.forEach((testCase) => {
+                                const { description, requestBody, expectedStatus, expectedResponse, itemID, requestType, expectedError, deletedItem, includedItem } = testCase;
+                                it(description, async() => {
+                                    const response = await agent.put(`${endpoint.route}/${itemID}`).set('Authorization', auth_token).send(requestBody); 
+                                    assert.equal(response.status, expectedStatus);
+    
+                                    if (requestType == 'Good') {
+                                        assert.deepEqual(response.body, expectedResponse);
+                                    } else if (requestType == 'Bad') {
+                                        assert.deepEqual(response.error.text, expectedError.message);
+                                    } else if (requestType == 'Purchased Checklist Item') {
+                                        //assert that the item is no longer in the checklist
+                                        assert.notDeepNestedInclude(response.body, deletedItem);
+                                        
+                                        //assert that the item is now in the inventory
+                                        const inventoryArray = await getAllItems(Inventory, 1);
+                                        const plainInventoryArray = JSON.parse(JSON.stringify(inventoryArray));
+                                        assert.deepNestedInclude(plainInventoryArray, includedItem);
                                     }
                                 });
                             });
                         });
                     });
                 });
-    
-                // describe('Update Item endpoint testing', () => { // to refactor into table-driven test
-                //     describe('Category', ()=> {
-                //         it('correctly returns an updated category', async () => {
-                //             //update item 1
-                //             const requestBody = { category_name: 'Update Category Test' };
-                //             const itemID = 1;
-    
-                //             const expectedResponse = { id: 1, category_name: 'Update Category Test', 'user_id': 1 };
-                //             const expectedStatus = 200;
-    
-                //             //make update
-                //             const response = await agent.put('/categories/' + itemID).send(requestBody); 
-    
-                //             //assert that the expectedResponse went through
-                //             assert.equal(response.status, expectedStatus);
-                //             assert.deepEqual(response.body, expectedResponse);
-                //         });
-                //         it('returns an error for a nonexistent category', async () => {
-                //             //update item 11
-                //             const requestBody = { category_name: 'Update Category Endpoint' };
-                //             const itemID = 11;
-    
-                //             const expectedError = nonExistentItemError;
-                //             const expectedStatus = 400;
-    
-                //             //make update
-                //             const response = await agent.put('/categories/' + itemID).send(requestBody); 
-    
-                //             //assert that the request failed with the right error and status code
-                //             assert.equal(response.status, expectedStatus);
-                //             assert.deepEqual(response.error.text, expectedError.message);
-                //         });
-    
-                //     });
-                //     describe('Inventory', () => {
-                //         it('correctly returns an updated inventory item', async () => {
-                //             //update item 1
-                //             const requestBody = {
-                //                 'item_name': 'Update Inventory Item Test',
-                //                 'quantity': 25,
-                //                 'category_id': 2,
-                //             };
-                //             const itemID = 1;
-    
-                //             const expectedResponse = {
-                //                 'id': 1,
-                //                 'item_name': 'Update Inventory Item Test',
-                //                 'quantity': 25,
-                //                 'category_id': 2,
-                //                 'user_id': 1
-                //             };
-                //             const expectedStatus = 200;
-    
-                //             //make update
-                //             const response = await agent.put('/inventory/' + itemID).send(requestBody);
-    
-                //             //assert that the expectedResponse went through
-                //             assert.equal(response.status, expectedStatus);
-                //             assert.deepEqual(response.body, expectedResponse);
-                //         });
-                //         it('returns an error for a nonexistent item', async () => {
-                //             //update item 11
-                //             const requestBody = {
-                //                 'item_name': 'Update Inventory Item Test',
-                //                 'quantity': 25,
-                //                 'category_id': 2,
-                //             };
-                //             const itemID = 11;
-    
-                //             const expectedError = nonExistentItemError;
-                //             const expectedStatus = 400;
-    
-                //             //make update
-                //             const response = await agent.put('/inventory/' + itemID).send(requestBody);
-    
-                //             //assert that the request failed with the right error and status code
-                //             assert.equal(response.status, expectedStatus);
-                //             assert.deepEqual(response.error.text, expectedError.message);
-                //         });
-                //     });
-                //     describe('Checklist', () => {
-                //         it('Correctly returns an updated unpurchased checklist item', async () => {
-                //             //update item 1
-                //             const requestBody = {
-                //                 'item_name': 'Update Checklist Item Test',
-                //                 'quantity': 13,
-                //                 'category_id': 1,
-                //             };
-                //             const itemID = 1;
-    
-                //             const expectedResponse = {
-                //                 'id': 1,
-                //                 'item_name': 'Update Checklist Item Test',
-                //                 'quantity': 13,
-                //                 'category_id': 1,
-                //                 'purchased': false,
-                //                 'user_id': 1
-                //             };
-                //             const expectedStatus = 200;
-    
-                //             //make update
-                //             const response = await agent.put('/checklist/' + itemID).send(requestBody);
-    
-                //             //assert that the expectedResponse went through
-                //             assert.equal(response.status, expectedStatus);
-                //             assert.deepEqual(response.body, expectedResponse);
-                //         });
-                //         it('returns an error for a nonexistent item', async () => {
-                //             //update item 11
-                //             const requestBody = {
-                //                 'item_name': 'Update Checklist Item Test',
-                //                 'quantity': 13,
-                //                 'category_id': 1,
-                //             };
-                //             const itemID = 11;
-    
-                //             const expectedError = nonExistentItemError;
-                //             const expectedStatus = 400;
-    
-                //             //make update
-                //             const response = await agent.put('/checklist/' + itemID).send(requestBody);
-    
-                //             //assert that the request failed with the right error and status code
-                //             assert.equal(response.status, expectedStatus);
-                //             assert.deepEqual(response.error.text, expectedError.message);
-                //         });
-                //         it('correctly moves a purchased item to the inventory', async () => { //might end up with another implementation of this based on the front end
-                //             //update item and set purchased to true
-                //             const requestBody = {
-                //                 'item_name': 'Update Checklist Item Test',
-                //                 'quantity': 13,
-                //                 'category_id': 1,
-                //                 'purchased': true
-                //             };
-                //             const itemID = 1;
-                //             const assertDeletedItem = {
-                //                 'id': 1,
-                //                 'item_name': 'Update Checklist Item Test',
-                //                 'quantity': 13,
-                //                 'category_id': 1,
-                //                 'purchased': false
-                //             };
-    
-                //             const assertIncludedItem = {
-                //                 'id': 7,
-                //                 'item_name': 'Update Checklist Item Test',
-                //                 'quantity': 13,
-                //                 'category_id': 1,
-                //                 'user_id': 1
-                //             };
-    
-                //             const expectedStatus = 200;
-    
-                //             //make update
-                //             const response = await agent.put('/checklist/' + itemID).send(requestBody);
-    
-                //             //assert that the item was added successfully and the response wasn't an updated item
-                //             assert.equal(response.status, expectedStatus);
-                        
-                //             //asserting that the item is now in Inventory
-                //             const inventoryArray = await getAllItems(Inventory);
-    
-                        
-                //             //assert that the item is no longer in the checklist
-                //             assert.notDeepNestedInclude(response.body, assertDeletedItem);
-                //             //assert that the item is now in the inventory
-                //             assert.deepNestedInclude(inventoryArray, assertIncludedItem);
-                //         });
-                //     });
-                // });
-                // describe('Delete Item Endpoint Testing', ()=> { // this can be refactored into a table driven test. 
-                //     describe('Categories', () => {
-                //         it('successfully deletes an existing item', async () => {
-                //             const itemID = 4;
-                //             const assertDeletedItem = {
-                //                 'id': 4, //wip
-                //                 'category_name': 'Post Category Test'
-                //             };
-                //             const expectedStatus = 200;
-        
-                //             const response = await agent.delete('/categories/' + itemID);
-        
-                //             assert.equal(response.status, expectedStatus);
-        
-                //             //assert that the item has been deleted from the returned array
-                //             assert.notDeepNestedInclude(response, assertDeletedItem); //double check this
-                //         });
-                //     });
-    
-                //     describe('Checklist', () => {
-                //         it('successfully deletes an existing item', async () => {
-                //             const itemID = 4;
-                //             const assertDeletedItem = {
-                //                 'id': 4,
-                //                 'item_name': 'Post Checklist Test',
-                //                 'quantity': 2,
-                //                 'category_id': 3,
-                //                 'purchased': false
-                //             };
-                        
-                //             const expectedStatus = 200;
-        
-                //             const response = await agent.delete('/checklist/' + itemID);
-        
-                //             assert.equal(response.status, expectedStatus);
-        
-                //             assert.notDeepNestedInclude(response, assertDeletedItem);
-                //         });
-                //     });
-    
-                //     describe('Inventory', () => {
-                //         it('successfully deletes an existing item', async () => {
-                //             const itemID = 1;
-                //             const assertDeletedItem = {
-                //                 'id': 1,
-                //                 'item_name': 'Update Inventory Item Test',
-                //                 'quantity': 25,
-                //                 'category_id': 2
-                //             };
-                        
-                //             const expectedStatus = 200;
-        
-                //             const response = await agent.delete('/inventory/' + itemID);
-    
-                //             assert.equal(response.status, expectedStatus);
-        
-                //             assert.notDeepNestedInclude(response, assertDeletedItem);
-                //         });
-                //     });
-    
-                //     describe('User', () => {
-                //         it('successfully deletes an existing item', async () => {
-                //             const itemID = 2;
-                //             const expectedStatus = 200;
-        
-                //             const response = await agent.delete('/user/' + itemID);
-        
-            //             assert.equal(response.status, expectedStatus);
-            //         });
-            //     });
+                describe('Delete Item Endpoint Testing', () => {
+                    const testCases = [
+                        {
+                            description: 'Categories - successfully deletes an existing item',
+                            endpoint: '/categories',
+                            itemID: 4,
+                            assertDeletedItem: {
+                                id: 4,
+                                category_name: 'Post Category Test'
+                            },
+                            expectedStatus: 200
+                        },
+                        {
+                            description: 'Checklist - successfully deletes an existing item',
+                            endpoint: '/checklist',
+                            itemID: 4,
+                            assertDeletedItem: {
+                                id: 4,
+                                item_name: 'Post Checklist Test',
+                                quantity: 2,
+                                category_id: 3,
+                                purchased: false
+                            },
+                            expectedStatus: 200
+                        },
+                        {
+                            description: 'Inventory - successfully deletes an existing item',
+                            endpoint: '/inventory',
+                            itemID: 1,
+                            assertDeletedItem: {
+                                id: 1,
+                                item_name: 'Update Inventory Item Test',
+                                quantity: 25,
+                                category_id: 2
+                            },
+                            expectedStatus: 200
+                        }
+                    ];
+                  
+                    testCases.forEach(({ description, endpoint, itemID, assertDeletedItem, expectedStatus }) => {
+                        it(description, async () => {
+                            const response = await agent.delete(`${endpoint}/${itemID}`).set('Authorization', auth_token);
+                            assert.equal(response.status, expectedStatus);
+                  
+                            if (assertDeletedItem) {
+                                assert.notDeepNestedInclude(response.body, assertDeletedItem);
+                            }
+                        });
+                    });
+                });
             });
            
         });

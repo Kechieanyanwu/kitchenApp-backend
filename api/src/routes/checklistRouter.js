@@ -51,7 +51,6 @@ checklistRouter.post('/', validateNewGroceryItem, async (req, res, next) => {
     try {
         addedItem = await addNewItem(Checklist, newItem);
     } catch (err) {
-        err.status = 400;
         next(err);
     }
     res.status(201).send(addedItem);
@@ -61,25 +60,25 @@ checklistRouter.post('/', validateNewGroceryItem, async (req, res, next) => {
 //update existing checklist item
 checklistRouter.put('/:itemID', async (req, res, next) => {
     //can i have a cached list of items in the database? Like an array of existing IDs? so I don't have to keep querying? Potentially....
-    const itemID = req.params.itemID; //code smell, could use a general router.params thingy especially to validate existence
+    const itemID = req.params.itemID;
     const update = req.body;
     let updatedItem;
 
-    if (update.purchased === true ) { //if this item has been marked as purchased
+    if (update.purchased === true ) {
         let updatedChecklist;
-        // eslint-disable-next-line no-useless-catch
         try {
-            updatedChecklist = await moveCheckedItem(itemID);
+            updatedChecklist = await moveCheckedItem(itemID, req.userId);
         } catch (err) {
-            throw (err);
+            next(err);
         }
         res.status(200).send(updatedChecklist);
     } else {
         try {
-            updatedItem = await updateItem(Checklist, itemID, update);
+            updatedItem = await updateItem(Checklist, itemID, req.userId, update);
         } catch (err) {
             next(err);
         }
+        
         res.status(200).send(updatedItem);
     }
 });
@@ -90,17 +89,19 @@ checklistRouter.delete('/:itemID', async (req, res, next) => {
     let updatedChecklist;
 
     try {
-        updatedChecklist = await deleteItem(Checklist, itemID);
+        updatedChecklist = await deleteItem(Checklist, itemID,req.userId);
     } catch (err) {
         next(err);
     }
+    
     res.status(200).send(updatedChecklist);
 
 });
 
 
-const errorHandler = (err, req, res) => {
-    res.status(err.status).send(err.message);
+// eslint-disable-next-line no-unused-vars
+const errorHandler = (err, req, res, next) => {
+    res.status(err.status || 500).send(err.message);
 };
 
 checklistRouter.use(errorHandler);

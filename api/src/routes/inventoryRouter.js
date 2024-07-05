@@ -21,7 +21,7 @@ inventoryRouter.get('/', async (req, res, next) => {
     try {
         inventoryArray = await getAllItems(Inventory, req.userId);
     } catch (err) {
-        next(err); //validate that all errs have message and status 
+        next(err);
     }
     res.status(200).json(inventoryArray);
 });
@@ -29,12 +29,13 @@ inventoryRouter.get('/', async (req, res, next) => {
 //count all inventory items
 inventoryRouter.get('/count', async (req, res, next) => {
     let count;
+
     try {
         count = await countAllItems(Inventory, req.userId);
     } catch (err) {
         next(err);
     }
-    console.log(count);
+
     res.status(200).json({ count });
 });
 
@@ -48,9 +49,9 @@ inventoryRouter.post('/', validateNewGroceryItem, async (req, res, next) => {
     try {
         addedItem = await addNewItem(Inventory, newItem);
     } catch (err) {
-        err.status = 400;
         next(err);
     }
+
     res.status(201).send(addedItem);
 });
 
@@ -61,7 +62,7 @@ inventoryRouter.put('/:itemID', async (req, res, next) => {
     let updatedItem;
 
     try {
-        updatedItem = await updateItem(Inventory, itemID, update);
+        updatedItem = await updateItem(Inventory, itemID, req.userId, update);
     } catch (err) {
         next(err);
     }
@@ -76,10 +77,11 @@ inventoryRouter.delete('/:itemID', async (req, res, next) => {
     let updatedInventory;
 
     try {
-        updatedInventory = await deleteItem(Inventory, itemID);
+        updatedInventory = await deleteItem(Inventory, itemID, req.userId);
     } catch (err) {
         next(err);
     }
+
     res.status(200).send(updatedInventory);
 
 });
@@ -87,8 +89,9 @@ inventoryRouter.delete('/:itemID', async (req, res, next) => {
 
 
 
-const errorHandler = (err, req, res) => {
-    res.status(err.status).send(err.message);
+// eslint-disable-next-line no-unused-vars
+const errorHandler = (err, req, res, next) => {
+    res.status(err.status || 500).send(err.message);
 };
 
 inventoryRouter.use(errorHandler);

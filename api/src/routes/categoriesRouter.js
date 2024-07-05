@@ -20,11 +20,13 @@ categoriesRouter.use(populateUser);
 //get all categories
 categoriesRouter.get('/', async (req, res, next) => {
     let categoriesArray;
+    
     try {
         categoriesArray = await getAllItems(Category, req.userId); 
     } catch (err) {
         next(err);
     }
+
     res.status(200).json(categoriesArray);
 });
 
@@ -38,9 +40,9 @@ categoriesRouter.post('/', validateNewCategory, async (req, res, next) => {
     try {
         addedCategory = await addNewItem(Category, newCategory);
     } catch (err) {
-        err.status = 400;
         next(err);
     }
+
     res.status(201).send(addedCategory); 
 });
 
@@ -52,7 +54,7 @@ categoriesRouter.put('/:itemID', async (req, res, next) => {
     let updatedCategory;
 
     try {
-        updatedCategory = await updateItem(Category, itemID, update);
+        updatedCategory = await updateItem(Category, itemID, req.userId, update);
     } catch (err) {
         next(err);
     }
@@ -66,18 +68,19 @@ categoriesRouter.delete('/:itemID', async (req, res, next) => {
     let updatedCategories;
 
     try {
-        updatedCategories = await deleteItem(Category, itemID);
+        updatedCategories = await deleteItem(Category, itemID, req.userId);
     } catch (err) {
         next(err);
     }
+    
     res.status(200).send(updatedCategories);
 
 });
 
 
-const errorHandler = (err, req, res) => {
-    console.log('in categories error handler'); //test
-    res.status(err.status).send(err.message);
+// eslint-disable-next-line no-unused-vars
+const errorHandler = (err, req, res, next) => {
+    res.status(err.status || 500).send(err.message);
 };
 
 categoriesRouter.use(errorHandler);
