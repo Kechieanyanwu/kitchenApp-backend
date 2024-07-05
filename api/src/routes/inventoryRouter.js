@@ -48,7 +48,6 @@ inventoryRouter.post('/', validateNewGroceryItem, async (req, res, next) => {
     try {
         addedItem = await addNewItem(Inventory, newItem);
     } catch (err) {
-        err.status = 400;
         next(err);
     }
     res.status(201).send(addedItem);

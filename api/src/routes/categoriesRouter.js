@@ -38,7 +38,6 @@ categoriesRouter.post('/', validateNewCategory, async (req, res, next) => {
     try {
         addedCategory = await addNewItem(Category, newCategory);
     } catch (err) {
-        err.status = 400;
         next(err);
     }
     res.status(201).send(addedCategory); 
@@ -54,7 +53,6 @@ categoriesRouter.put('/:itemID', async (req, res, next) => {
     try {
         updatedCategory = await updateItem(Category, itemID, req.userId, update);
     } catch (err) {
-        console.log('error is ', err); //test
         next(err);
     }
 
